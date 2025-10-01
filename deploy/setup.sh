@@ -67,25 +67,14 @@ else
     echo "✓ Certbot already installed"
 fi
 
-# Clone repository
-INSTALL_DIR="/var/www/pinterest-downloader"
-if [ ! -d "$INSTALL_DIR" ]; then
-    echo "📥 Cloning repository..."
-    read -p "Enter your repository URL: " REPO_URL
-    $SUDO mkdir -p /var/www
-    cd /var/www
-    $SUDO git clone "$REPO_URL" pinterest-downloader
-    if [ "$EUID" -ne 0 ]; then
-        $SUDO chown -R $USER:$USER pinterest-downloader
-    fi
-    echo "✓ Repository cloned"
-else
-    echo "✓ Repository already exists at $INSTALL_DIR"
-    if [ "$EUID" -ne 0 ]; then
-        $SUDO chown -R $USER:$USER $INSTALL_DIR
-    fi
-fi
+# Detect repository location
+echo "� Locating repository..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+echo "✓ Repository found at: $INSTALL_DIR"
+
+# Ensure we're in the project directory
 cd "$INSTALL_DIR"
 
 # Make scripts executable
