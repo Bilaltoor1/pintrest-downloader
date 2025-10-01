@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Build outputs
+dist/
+build/
+downloads/
+
+# Cookies and cache
+cookies.json
+*.cache
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
