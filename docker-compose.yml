@@ -1,40 +1,114 @@
-version: "3.9"version: "3.9"
+version: "3.9"version: "3.9"version: "3.9"version: "3.9"
 
 
 
-services:services:
+services:
 
-  backend:  backend:
+  backend:
 
-    build:    build:
+    build:services:
 
-      context: ./backend      context: ./backend
+      context: ./backend
 
-    image: yttmp3-backend:latest    image: yttmp3-backend:latest
+    image: pinterest-backend  backend:
 
-    container_name: pinterest-backend    restart: unless-stopped
+    container_name: pinterest-backend
 
-    restart: unless-stopped    environment:
+    restart: unless-stopped    build:services:services:
 
-    environment:      FLASK_ENV: production
+    environment:
 
-      FLASK_ENV: production    expose:
+      - FLASK_ENV=production      context: ./backend
 
-      PYTHONUNBUFFERED: 1      - "5000"
+      - PYTHONUNBUFFERED=1
 
-    volumes:
+    volumes:    image: yttmp3-backend:latest  backend:  backend:
 
-      - ./backend/downloads:/app/downloads  web:
+      - ./backend/downloads:/app/downloads
 
-    expose:    build:
+    networks:    container_name: pinterest-backend
 
-      - "5000"      context: ./frontend
+      - app-network
 
-    networks:      args:
+    restart: unless-stopped    build:    build:
 
-      - app-network        VITE_API_URL: /
+  frontend:
 
-    image: yttmp3-frontend:latest
+    build:    environment:
+
+      context: ./frontend
+
+      args:      FLASK_ENV: production      context: ./backend      context: ./backend
+
+        VITE_API_URL: /
+
+    image: pinterest-frontend      PYTHONUNBUFFERED: 1
+
+    container_name: pinterest-frontend
+
+    restart: unless-stopped    volumes:    image: yttmp3-backend:latest    image: yttmp3-backend:latest
+
+    depends_on:
+
+      - backend      - ./backend/downloads:/app/downloads
+
+    ports:
+
+      - "8080:80"    expose:    container_name: pinterest-backend    restart: unless-stopped
+
+    networks:
+
+      - app-network      - "5000"
+
+
+
+networks:    networks:    restart: unless-stopped    environment:
+
+  app-network:
+
+    driver: bridge      - app-network
+
+
+
+volumes:    environment:      FLASK_ENV: production
+
+  downloads:
+  web:
+
+    build:      FLASK_ENV: production    expose:
+
+      context: ./frontend
+
+      args:      PYTHONUNBUFFERED: 1      - "5000"
+
+        VITE_API_URL: /
+
+    image: yttmp3-frontend:latest    volumes:
+
+    container_name: pinterest-frontend
+
+    restart: unless-stopped      - ./backend/downloads:/app/downloads  web:
+
+    depends_on:
+
+      - backend    expose:    build:
+
+    ports:
+
+      - "8080:80"      - "5000"      context: ./frontend
+
+    networks:
+
+      - app-network    networks:      args:
+
+
+
+networks:      - app-network        VITE_API_URL: /
+
+  app-network:
+
+    driver: bridge    image: yttmp3-frontend:latest
+
 
   web:    restart: unless-stopped
 
