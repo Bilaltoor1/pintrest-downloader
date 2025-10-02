@@ -24,7 +24,7 @@ chmod +x deploy/complete-deploy.sh
 **That's it!** ✨
 
 The script will:
-- ✅ Build Docker containers (Backend + Frontend)
+- ✅ Build Docker containers (Backend + Next.js Frontend)
 - ✅ Start services
 - ✅ Configure Nginx
 - ✅ Setup firewall
@@ -125,10 +125,11 @@ certbot --nginx -d yttmp3.com -d www.yttmp3.com
 │   ├── app.py                 # Flask application
 │   ├── requirements.txt       # Python dependencies
 │   └── downloads/             # Download storage
-├── frontend/
-│   ├── Dockerfile             # Frontend container
-│   ├── nginx/default.conf     # Internal nginx config
-│   └── src/                   # React application
+├── frontend-nextjs/
+│   ├── Dockerfile             # Next.js container
+│   ├── app/                   # Next.js App Router
+│   ├── components/            # React components
+│   └── utils/                 # Helper functions
 └── deploy/
     └── complete-deploy.sh     # Deployment script
 ```
@@ -144,10 +145,10 @@ yttmp3.com (DNS)
     ↓
 Server Nginx (:80/:443) + SSL
     ↓
-Docker Frontend Container (:8080)
-    ├─ React App (static files)
-    └─ /api/* → Backend Container (:5000)
-                └─ Flask + pinterest-dl
+Docker Next.js Container (:8080→3000)
+    ├─ Next.js 15 App (React 19)
+    └─ Internal API proxy → Backend Container (:5000)
+                           └─ Flask + pinterest-dl
 ```
 
 ---

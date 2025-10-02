@@ -15,12 +15,16 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-    image: pinterest-frontend:latest
+      context: ./frontend-nextjs
+      args:
+        NEXT_PUBLIC_API_URL: /
+    image: pinterest-frontend-nextjs:latest
     container_name: pinterest-frontend
     restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=/
     ports:
-      - "8080:80"
+      - "8080:3000"
     depends_on:
       - backend
     networks:

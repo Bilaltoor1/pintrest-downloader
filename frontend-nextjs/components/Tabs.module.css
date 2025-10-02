@@ -1,0 +1,40 @@
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.tabButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tabButton:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.tabButton.active {
+  background: white;
+  color: #4c51bf;
+  border-color: white;
+  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.25);
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    gap: 0.75rem;
+  }
+
+  .tabButton {
+    flex: 1 1 100%;
+  }
+}

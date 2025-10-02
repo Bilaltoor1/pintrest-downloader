@@ -1,0 +1,101 @@
+.tableWrapper {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(76, 81, 191, 0.2);
+  background: white;
+}
+
+.mediaTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.mediaTable th,
+.mediaTable td {
+  padding: 0.85rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.mediaTable thead {
+  background: rgba(102, 126, 234, 0.12);
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+}
+
+.mediaTable tbody tr:nth-child(even) {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.mediaTable tbody tr:hover {
+  background: rgba(102, 126, 234, 0.15);
+}
+
+.mediaThumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.btnLink {
+  color: #4c51bf;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.btnLink:hover {
+  text-decoration: underline;
+}
+
+.btnDownload {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s;
+  min-width: 80px;
+}
+
+.btnDownload:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.35);
+}
+
+.btnDownload:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #a0aec0;
+}
+
+@media (max-width: 768px) {
+  .tableWrapper {
+    margin-top: 1rem;
+  }
+
+  .mediaTable {
+    min-width: 100%;
+  }
+
+  .mediaThumb {
+    width: 64px;
+    height: 64px;
+  }
+}
