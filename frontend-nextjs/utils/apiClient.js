@@ -5,10 +5,10 @@
 
 import axios from 'axios'
 
-// Get API base URL from environment variable
-// In development: http://localhost:5000
-// In production: https://yttmp3.com/api
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+// Base URL setup
+// We'll default to same-origin and rely on Next.js rewrites to forward /api/* to the backend.
+// If NEXT_PUBLIC_API_URL is provided, it will override this (useful for local non-Next setups).
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''
 
 // Create axios instance with default configuration
 const apiClient = axios.create({
