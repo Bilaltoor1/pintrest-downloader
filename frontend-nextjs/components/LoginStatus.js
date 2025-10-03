@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
+import apiClient from '@/utils/apiClient'
 import styles from './LoginStatus.module.css'
 
-export default function LoginStatus({ hasCookies, onCookiesUpdate, apiUrl }) {
+export default function LoginStatus({ hasCookies, onCookiesUpdate }) {
   const [showLogin, setShowLogin] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,7 +16,7 @@ export default function LoginStatus({ hasCookies, onCookiesUpdate, apiUrl }) {
     setAuthError(null)
 
     try {
-      await axios.post(`${apiUrl}/api/login`, {
+      await apiClient.post('/api/login', {
         email,
         password,
       })

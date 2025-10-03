@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
+import apiClient from '@/utils/apiClient'
 import styles from './SinglePinTab.module.css'
 import { getPrimaryMedia, getPinTitle, getAltText, getResolution } from '../utils/mediaHelpers'
 import MediaTable from './MediaTable'
 
-export default function SinglePinTab({ apiUrl }) {
+export default function SinglePinTab() {
   const [singleUrl, setSingleUrl] = useState('')
   const [singleDownloadVideo, setSingleDownloadVideo] = useState(false)
   const [singleCaption, setSingleCaption] = useState('none')
@@ -31,13 +31,13 @@ export default function SinglePinTab({ apiUrl }) {
     setSingleDownloadResult(null)
 
     try {
-      const response = await axios.post(`${apiUrl}/api/scrape`, {
+      const response = await apiClient.post('/api/scrape', {
         url: singleUrl.trim(),
         num: 1,
       })
 
       setSingleResult(response.data)
-
+      console.log(response.data)
       if (!response.data?.count) {
         setSingleError('No media found for this pin. Double-check the URL and try again.')
       }
@@ -65,14 +65,14 @@ export default function SinglePinTab({ apiUrl }) {
     setSingleDownloadResult(null)
 
     try {
-      const response = await axios.post(`${apiUrl}/api/download-single`, {
+      const response = await apiClient.post('/api/download-single', {
         url: singleUrl.trim(),
         download_video: singleDownloadVideo,
         caption: singleCaption,
       })
 
       if (response.data.success && response.data.download_url) {
-        const downloadResponse = await axios.get(`${apiUrl}${response.data.download_url}`, {
+        const downloadResponse = await apiClient.get(response.data.download_url, {
           responseType: 'blob'
         })
 
@@ -205,7 +205,6 @@ export default function SinglePinTab({ apiUrl }) {
               <MediaTable 
                 items={singleResult.media || []} 
                 limit={1}
-                apiUrl={apiUrl}
               />
             </>
           ) : (
@@ -221,7 +220,7 @@ export default function SinglePinTab({ apiUrl }) {
               </p>
               {singleDownloadResult.download_url && (
                 <a
-                  href={`${apiUrl}${singleDownloadResult.download_url}`}
+                  href={singleDownloadResult.download_url}
                   className={styles.btnPrimary}
                   download
                 >

@@ -10,7 +10,15 @@ from werkzeug.utils import secure_filename
 import requests
 
 app = Flask(__name__)
-CORS(app)
+# Enable CORS for all routes with explicit configuration
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000", "http://localhost:8080", "http://192.168.1.103:3000", "https://yttmp3.com"],
+        "methods": ["GET", "POST", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": True
+    }
+})
 
 # Configuration
 DOWNLOAD_FOLDER = 'downloads'

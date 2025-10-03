@@ -13,9 +13,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Set build-time environment variable
-ARG NEXT_PUBLIC_API_URL=/
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+# Set build-time environment variable for backend URL
+ARG BACKEND_URL=http://backend:5000
+ENV BACKEND_URL=${BACKEND_URL}
 
 # Build the application
 RUN npm run build

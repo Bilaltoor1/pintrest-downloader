@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
+import apiClient from '@/utils/apiClient'
 import styles from './BulkDownloaderTab.module.css'
 import MediaTable from './MediaTable'
 
 const DEFAULT_BULK_COUNT = 30
 const MAX_BULK_COUNT = 150
 
-export default function BulkDownloaderTab({ apiUrl }) {
+export default function BulkDownloaderTab() {
   const [bulkUrl, setBulkUrl] = useState('')
   const [bulkNumImages, setBulkNumImages] = useState(DEFAULT_BULK_COUNT)
   const [bulkMinResolution, setBulkMinResolution] = useState('')
@@ -32,7 +32,7 @@ export default function BulkDownloaderTab({ apiUrl }) {
     setBulkDownloadResult(null)
 
     try {
-      const response = await axios.post(`${apiUrl}/api/scrape`, {
+      const response = await apiClient.post('/api/scrape', {
         url: bulkUrl.trim(),
         num: bulkNumImages,
         min_resolution: bulkMinResolution.trim() || null,
@@ -67,7 +67,7 @@ export default function BulkDownloaderTab({ apiUrl }) {
     setBulkDownloadResult(null)
 
     try {
-      const response = await axios.post(`${apiUrl}/api/download`, {
+      const response = await apiClient.post('/api/download', {
         url: bulkUrl.trim(),
         num: bulkNumImages,
         min_resolution: bulkMinResolution.trim() || null,
@@ -193,8 +193,7 @@ export default function BulkDownloaderTab({ apiUrl }) {
               <MediaTable 
                 items={bulkResult.media || []} 
                 limit={15}
-                apiUrl={apiUrl}
-              />
+               />
             </>
           ) : (
             <p className={styles.emptyState}>
@@ -211,7 +210,7 @@ export default function BulkDownloaderTab({ apiUrl }) {
               </p>
               {bulkDownloadResult.download_url && (
                 <a
-                  href={`${apiUrl}${bulkDownloadResult.download_url}`}
+                  href={bulkDownloadResult.download_url}
                   className={styles.btnPrimary}
                   download
                 >

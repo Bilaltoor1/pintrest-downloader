@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
+import apiClient from '@/utils/apiClient'
 import styles from './MediaTable.module.css'
 import { resolveMediaUrl, getAltText, getResolution } from '../utils/mediaHelpers'
 
-export default function MediaTable({ items = [], limit = 10, apiUrl }) {
+export default function MediaTable({ items = [], limit = 10 }) {
   const [downloadingItems, setDownloadingItems] = useState(new Set())
 
   const handleSingleItemDownload = async (item, index) => {
@@ -19,7 +19,7 @@ export default function MediaTable({ items = [], limit = 10, apiUrl }) {
     setDownloadingItems(prev => new Set([...prev, itemKey]))
 
     try {
-      const response = await axios.post(`${apiUrl}/api/download-direct`, {
+      const response = await apiClient.post('/api/download-direct', {
         media_url: mediaUrl
       }, {
         responseType: 'blob'
@@ -82,7 +82,7 @@ export default function MediaTable({ items = [], limit = 10, apiUrl }) {
             <img src={src} alt={getAltText(item)} className={styles.mediaThumb} />
           </td>
           <td>{getAltText(item)}</td>
-          <td>{getResolution(item)}</td>
+          {/* <td>{getResolution(item)}</td> */}
           <td>
             <div className={styles.actionButtons}>
               <a href={src} target="_blank" rel="noreferrer" className={styles.btnLink}>
@@ -110,7 +110,7 @@ export default function MediaTable({ items = [], limit = 10, apiUrl }) {
             <th>#</th>
             <th>Preview</th>
             <th>Description</th>
-            <th>Resolution</th>
+            {/* <th>Resolution</th> */}
             <th>Actions</th>
           </tr>
         </thead>

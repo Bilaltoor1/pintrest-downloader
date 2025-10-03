@@ -9,6 +9,7 @@ export const resolveMediaUrl = (item = {}) => {
     item.link,
     item.href,
     item.permalink,
+    item.src, // Add src property for Pinterest API response
   ]
 
   if (item.original?.url) {

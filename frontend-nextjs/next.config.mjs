@@ -9,8 +9,9 @@ const nextConfig = {
       },
     ],
   },
+  // Environment variables available at runtime
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '',
+    BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:5000',
   },
 };
 

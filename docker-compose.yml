@@ -17,12 +17,12 @@ services:
     build:
       context: ./frontend-nextjs
       args:
-        NEXT_PUBLIC_API_URL: /
+        BACKEND_URL: http://backend:5000
     image: pinterest-frontend-nextjs:latest
     container_name: pinterest-frontend
     restart: unless-stopped
     environment:
-      - NEXT_PUBLIC_API_URL=/
+      - BACKEND_URL=http://backend:5000
     ports:
       - "8080:3000"
     depends_on:
