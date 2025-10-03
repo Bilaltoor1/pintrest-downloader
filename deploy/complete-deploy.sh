@@ -48,11 +48,19 @@ else
     echo "✓ Nginx already installed"
 fi
 
+# Ensure nginx service is enabled and running before attempting a reload
+echo "Ensuring Nginx service is running..."
+systemctl enable nginx >/dev/null 2>&1 || true
+if ! systemctl is-active --quiet nginx; then
+    systemctl start nginx
+fi
+
 # Create nginx config
 echo "Configuring Nginx for yttmp3.com..."
 
 # Remove default site
 rm -f /etc/nginx/sites-enabled/default
+rm -f /etc/nginx/sites-enabled/yttmp3.com /etc/nginx/sites-enabled/yttmp3.com.conf
 
 # Create our site config
 cat > /etc/nginx/sites-available/yttmp3.com << 'EOF'
@@ -95,7 +103,11 @@ ln -sf /etc/nginx/sites-available/yttmp3.com /etc/nginx/sites-enabled/
 
 # Test and reload nginx
 nginx -t
-systemctl reload nginx
+if ! systemctl reload nginx; then
+    echo "Nginx reload failed; attempting to start service and retry..."
+    systemctl start nginx
+    systemctl reload nginx
+fi
 
 echo "✓ Nginx configured"
 
