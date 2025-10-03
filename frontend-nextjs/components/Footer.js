@@ -14,6 +14,10 @@ export default function Footer() {
           <span> | </span>
           <Link href="/how-to" className={styles.footerLink}>How To</Link>
           <span> | </span>
+          <Link href="/about-us" className={styles.footerLink}>About Us</Link>
+          <span> | </span>
+          <Link href="/contact-us" className={styles.footerLink}>Contact Us</Link>
+          <span> | </span>
           <Link href="/terms" className={styles.footerLink}>Terms</Link>
           <span> | </span>
           <Link href="/privacy-policy" className={styles.footerLink}>Privacy Policy</Link>

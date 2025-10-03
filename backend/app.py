@@ -579,6 +579,7 @@ def scrape_video():
             'quiet': True,
             'no_warnings': True,
             'extract_flat': False,
+            'ignoreerrors': True,
         }
         
         videos = []
@@ -603,15 +604,18 @@ def scrape_video():
                     formats = info.get('formats', [])
                     seen_resolutions = set()
                     
+                    # Collect video formats with their heights
                     for fmt in formats:
-                        if fmt.get('vcodec') != 'none':  # Only video formats
+                        vcodec = fmt.get('vcodec', 'none')
+                        
+                        if vcodec != 'none':  # Only video formats
                             height = fmt.get('height', 0)
                             width = fmt.get('width', 0)
                             format_id = fmt.get('format_id', '')
                             ext = fmt.get('ext', 'mp4')
                             filesize = fmt.get('filesize', 0)
                             
-                            if height and width:
+                            if height and width and height >= 144:  # Skip very low quality
                                 resolution_key = f"{width}x{height}"
                                 if resolution_key not in seen_resolutions:
                                     seen_resolutions.add(resolution_key)
@@ -627,6 +631,18 @@ def scrape_video():
                     
                     # Sort formats by height (quality) descending
                     video_data['formats'].sort(key=lambda x: x['height'], reverse=True)
+                    
+                    # Add a "Best Quality" option at the beginning
+                    if video_data['formats']:
+                        video_data['formats'].insert(0, {
+                            'format_id': 'best',
+                            'ext': 'mp4',
+                            'width': 0,
+                            'height': 0,
+                            'filesize': 0,
+                            'resolution': 'Best Available',
+                            'quality': 'Best Quality (with audio)'
+                        })
                     
                     videos.append(video_data)
             
@@ -644,7 +660,7 @@ def scrape_video():
 
 @app.route('/api/download-video', methods=['POST'])
 def download_video():
-    """Download Pinterest video using yt-dlp"""
+    """Download Pinterest video using yt-dlp with audio merged using FFmpeg"""
     try:
         data = request.json
         url = data.get('url')
@@ -660,34 +676,113 @@ def download_video():
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         output_template = os.path.join(DOWNLOAD_FOLDER, f'pinterest_video_{timestamp}.%(ext)s')
         
-        # Configure yt-dlp options
+        # Try downloading with audio first
+        audio_merged = False
+        warning_message = None
+        
+        # Configure yt-dlp options with FFmpeg for merging video and audio
+        if format_id == 'best':
+            # Download best video + best audio and merge them
+            format_selector = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best'
+        else:
+            # Download specific video format + best audio and merge
+            format_selector = f'{format_id}+bestaudio/best'
+        
         ydl_opts = {
-            'format': format_id if format_id != 'best' else 'best',
+            'format': format_selector,
             'outtmpl': output_template,
-            'quiet': True,
-            'no_warnings': True,
+            'quiet': False,
+            'no_warnings': False,
+            'merge_output_format': 'mp4',
+            'postprocessors': [{
+                'key': 'FFmpegVideoConvertor',
+                'preferedformat': 'mp4',
+            }],
+            'prefer_ffmpeg': True,
+            'keepvideo': False,
         }
+        
+        downloaded_file = None
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             try:
                 info = ydl.extract_info(url, download=True)
-                
-                # Get the actual downloaded filename
                 downloaded_file = ydl.prepare_filename(info)
+                audio_merged = True
                 
-                if os.path.exists(downloaded_file):
-                    filename = os.path.basename(downloaded_file)
+            except Exception as merge_error:
+                # If FFmpeg merge fails, try downloading video only
+                if 'ffmpeg' in str(merge_error).lower() or 'merging' in str(merge_error).lower():
+                    print(f"FFmpeg merge failed: {merge_error}")
+                    print("Attempting to download video only without audio...")
+                    warning_message = "Audio could not be merged (FFmpeg not available). Downloaded video only."
                     
-                    return jsonify({
-                        'success': True,
-                        'download_url': f'/api/download-video-file/{filename}',
-                        'filename': filename
-                    })
+                    # Fallback to video-only download
+                    ydl_opts_video_only = {
+                        'format': 'bestvideo[ext=mp4]/best[ext=mp4]/best',
+                        'outtmpl': output_template,
+                        'quiet': False,
+                        'no_warnings': False,
+                    }
+                    
+                    try:
+                        with yt_dlp.YoutubeDL(ydl_opts_video_only) as ydl_fallback:
+                            info = ydl_fallback.extract_info(url, download=True)
+                            downloaded_file = ydl_fallback.prepare_filename(info)
+                            audio_merged = False
+                    except Exception as video_error:
+                        return jsonify({'error': f'Failed to download video: {str(video_error)}'}), 500
                 else:
-                    return jsonify({'error': 'Download failed'}), 500
-                    
-            except Exception as e:
-                return jsonify({'error': f'Failed to download video: {str(e)}'}), 500
+                    raise merge_error
+        
+        # Find the downloaded file
+        if downloaded_file and not os.path.exists(downloaded_file):
+            base = os.path.splitext(downloaded_file)[0]
+            downloaded_file = base + '.mp4'
+        
+        if not os.path.exists(downloaded_file):
+            # Try other extensions as fallback
+            base = os.path.splitext(downloaded_file)[0] if downloaded_file else os.path.join(DOWNLOAD_FOLDER, f'pinterest_video_{timestamp}')
+            for ext in ['.webm', '.mkv', '.f137.mp4', '.f251.webm']:
+                test_file = base + ext
+                if os.path.exists(test_file):
+                    downloaded_file = test_file
+                    break
+        
+        if downloaded_file and os.path.exists(downloaded_file):
+            filename = os.path.basename(downloaded_file)
+            
+            response_data = {
+                'success': True,
+                'download_url': f'/api/download-video-file/{filename}',
+                'filename': filename,
+                'audio_merged': audio_merged
+            }
+            
+            if warning_message:
+                response_data['warning'] = warning_message
+            
+            return jsonify(response_data)
+        else:
+            # List files in download folder for debugging
+            files_in_folder = os.listdir(DOWNLOAD_FOLDER)
+            matching_files = [f for f in files_in_folder if timestamp in f]
+            
+            if matching_files:
+                filename = matching_files[0]
+                response_data = {
+                    'success': True,
+                    'download_url': f'/api/download-video-file/{filename}',
+                    'filename': filename,
+                    'audio_merged': audio_merged
+                }
+                
+                if warning_message:
+                    response_data['warning'] = warning_message
+                
+                return jsonify(response_data)
+            
+            return jsonify({'error': 'Download failed - file not found'}), 500
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import styles from '../../components/ContentPage.module.css'
 
 export default function PrivacyPolicy() {
@@ -20,8 +18,6 @@ export default function PrivacyPolicy() {
       </Head>
 
       <div className={styles.wrapper}>
-        <Header />
-
         <main className={styles.main}>
           <div className={styles.card}>
             <h1 className={styles.title}>
@@ -200,8 +196,6 @@ export default function PrivacyPolicy() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
     </>
   );

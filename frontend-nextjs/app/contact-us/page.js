@@ -1,5 +1,3 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import Head from 'next/head';
 import Script from 'next/script';
 import styles from '../../components/ContentPage.module.css'
@@ -44,8 +42,6 @@ export default function ContactUs() {
       </Head>
 
       <div className={styles.wrapper}>
-        <Header />
-
         <main className={styles.main}>
           <div className={styles.card}>
             <h1 className={styles.title}>
@@ -155,8 +151,6 @@ export default function ContactUs() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
 
       <Script id="ld-contact" type="application/ld+json">

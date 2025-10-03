@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import styles from '../../components/ContentPage.module.css'
 
 export default function Terms() {
@@ -20,8 +18,6 @@ export default function Terms() {
       </Head>
 
       <div className={styles.wrapper}>
-        <Header />
-
         <main className={styles.main}>
           <div className={styles.card}>
             <h1 className={styles.title}>
@@ -134,8 +130,6 @@ export default function Terms() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
     </>
   );

@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import styles from './page.module.css'
 import apiClient from '@/utils/apiClient'
 
@@ -114,8 +112,6 @@ export default function ImageDownloader() {
 
   return (
     <div className={styles.pageContainer}>
-      <Header />
-      
       <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.hero}>
@@ -357,8 +353,6 @@ export default function ImageDownloader() {
           </p>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }

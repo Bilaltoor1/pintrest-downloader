@@ -1,353 +1,286 @@
-import Script from 'next/script';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+﻿import Script from 'next/script';
 import FAQ from '../../components/FAQ';
 import styles from './page.module.css';
 
 export const metadata = {
-  title: 'How to Download Pinterest Videos - YTTMP3.com',
-  description: 'Learn how to download Pinterest videos, images, and GIFs using YTTMP3.com. Step-by-step guide for mobile app and desktop with video tutorial.',
-}
+  title: 'How to Download Pinterest Images & Videos - Complete Guide',
+  description: 'Learn how to download Pinterest images and videos on desktop and mobile. Step-by-step guide for saving Pinterest content in high quality.',
+  keywords: 'pinterest download guide, how to save pinterest images, download pinterest videos, pinterest downloader tutorial',
+  openGraph: {
+    title: 'How to Download Pinterest Images & Videos',
+    description: 'Complete step-by-step guide to downloading Pinterest content on any device',
+    type: 'article',
+  },
+};
 
-export default function HowTo() {
+export default function HowToPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Download Pinterest Images and Videos",
+    "description": "Complete guide to downloading Pinterest images and videos on desktop and mobile devices",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Copy Pinterest URL",
+        "text": "Open Pinterest and copy the URL of the image or video you want to download"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Paste URL",
+        "text": "Paste the Pinterest URL into the downloader tool"
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Download Content",
+        "text": "Click the download button to save the image or video to your device"
+      }
+    ]
+  };
+
   return (
-    <>
-      <div className={styles.pageContainer}>
-        <Header />
+    <div className={styles.pageContainer}>
+      <Script
+        id="how-to-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
-        <main className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
-            <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-              How to Download Pinterest Videos using YTTMP3.com?
-            </h1>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <h1 className={styles.mainTitle}>
+            How to Download Pinterest Images & Videos
+          </h1>
+          <p className={styles.subtitle}>
+            Complete guide to saving Pinterest content on desktop and mobile devices - fast, easy, and free
+          </p>
+        </section>
 
-            <div className="text-center mb-8">
-              <p className="text-xl text-gray-600">
-                YTTMP3.com is the Best Pinterest video downloader online. The steps below provide quick info on how to download Pinterest videos, images, and GIFs from both the mobile app and desktop versions. ❤️
-              </p>
-            </div>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Download Instructions</h2>
+          <p className={styles.sectionText}>
+            Follow these simple steps to download any Pinterest image or video to your device
+          </p>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              {/* Mobile App Steps */}
-              <div className="bg-blue-50 rounded-lg p-6">
-                <h2 className="text-2xl font-semibold text-blue-800 mb-6 text-center">
-                  📱 Steps to Download from Mobile App
-                </h2>
-
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      1
-                    </div>
-                    <div>
-                      <p className="text-blue-700 font-medium">Open the Pinterest App</p>
-                      <p className="text-blue-600 text-sm">Select the video, image, or GIF you want to download</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <p className="text-blue-700 font-medium">Tap the ⋯ icon</p>
-                      <p className="text-blue-600 text-sm">At the top right corner (or bottom right in latest version)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <p className="text-blue-700 font-medium">Tap "Copy Link"</p>
-                      <p className="text-blue-600 text-sm">Copy the Pinterest URL to your clipboard</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      4
-                    </div>
-                    <div>
-                      <p className="text-blue-700 font-medium">Paste URL on YTTMP3.com</p>
-                      <p className="text-blue-600 text-sm">Paste the video URL in the download input box</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      5
-                    </div>
-                    <div>
-                      <p className="text-blue-700 font-medium">Tap Download</p>
-                      <p className="text-blue-600 text-sm">Click the Download button to save to your device</p>
-                    </div>
+          <div className={styles.instructionsGrid}>
+            <div className={styles.instructionCard}>
+              <h3 className={styles.featureTitle}>Desktop Instructions</h3>
+              <div className={styles.stepsList}>
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>1</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Find Your Content</h4>
+                    <p className={styles.stepDescription}>
+                      Open Pinterest.com and browse to the image or video you want to download
+                    </p>
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-blue-100 rounded-lg">
-                  <p className="text-blue-800 text-sm">
-                    <strong>Pro Tip:</strong> The Pinterest video, image, or GIF will be downloaded directly to your device's Downloads folder.
-                  </p>
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>2</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Copy the URL</h4>
+                    <p className={styles.stepDescription}>
+                      Click on the pin to open it in full view. Copy the URL from your browser address bar
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>3</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Paste in Downloader</h4>
+                    <p className={styles.stepDescription}>
+                      Return to our downloader tool and paste the URL into the input field
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>4</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Download</h4>
+                    <p className={styles.stepDescription}>
+                      Click the Download button. Your image or video will be saved to your downloads folder
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Desktop Steps */}
-              <div className="bg-green-50 rounded-lg p-6">
-                <h2 className="text-2xl font-semibold text-green-800 mb-6 text-center">
-                  💻 Steps to Download from Desktop
-                </h2>
-
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      1
-                    </div>
-                    <div>
-                      <p className="text-green-700 font-medium">Open Pinterest Website</p>
-                      <p className="text-green-600 text-sm">Go to pinterest.com in your browser</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <p className="text-green-700 font-medium">Find Your Content</p>
-                      <p className="text-green-600 text-sm">Select the video, image, or GIF you want</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <p className="text-green-700 font-medium">Copy the URL</p>
-                      <p className="text-green-600 text-sm">Copy the Pinterest video URL from address bar</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      4
-                    </div>
-                    <div>
-                      <p className="text-green-700 font-medium">Visit YTTMP3.com</p>
-                      <p className="text-green-600 text-sm">Paste the URL in our downloader box</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      5
-                    </div>
-                    <div>
-                      <p className="text-green-700 font-medium">Download</p>
-                      <p className="text-green-600 text-sm">Press download and save to your computer</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 bg-green-100 rounded-lg">
-                  <p className="text-green-800 text-sm">
-                    <strong>Pro Tip:</strong> Check your Downloads folder. You can also press Ctrl+J to see download history.
-                  </p>
-                </div>
+              <div className={styles.proTip}>
+                <strong>Pro Tip:</strong> For bulk downloads, use our Bulk Download mode to download multiple pins at once
               </div>
             </div>
 
-            {/* Video Quality & Formats */}
-            <div className="bg-purple-50 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-semibold text-purple-800 mb-4 text-center">
-                🎥 YTTMP3.com: Supported Video Quality & Formats
-              </h2>
-
-              <p className="text-purple-700 mb-4 text-center">
-                One of the best things about YTTMP3.com is the choice of download quality. Whether you're on mobile data or Wi-Fi, you can choose the right format and resolution.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-purple-800 mb-3">Video Quality</h3>
-                  <ul className="space-y-2 text-purple-700">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      HD (720p and 1080p) for clear viewing
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      2K and 4K Pinterest video downloads if available
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      MP4 format for universal compatibility
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      MP3 conversion for audio-only content
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-purple-800 mb-3">Content Types</h3>
-                  <ul className="space-y-2 text-purple-700">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      Standard Pinterest videos
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      Pinterest reels and short videos
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      GIFs and animated pins
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-                      High-resolution images
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Compatibility */}
-            <div className="bg-orange-50 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-semibold text-orange-800 mb-4 text-center">
-                📱 Does YTTMP3.com Work on Mobile?
-              </h2>
-
-              <p className="text-orange-700 mb-4 text-center">
-                Absolutely. YTTMP3.com supports all mobile devices and platforms.
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-4 text-center">
-                <div className="bg-white rounded-lg p-4">
-                  <div className="text-2xl mb-2">📱</div>
-                  <h3 className="font-semibold text-orange-800">Android</h3>
-                  <p className="text-sm text-orange-600">Full support with APK compatibility</p>
-                </div>
-                <div className="bg-white rounded-lg p-4">
-                  <div className="text-2xl mb-2">🍎</div>
-                  <h3 className="font-semibold text-orange-800">iOS/iPhone</h3>
-                  <p className="text-sm text-orange-600">Safari and Chrome support</p>
-                </div>
-                <div className="bg-white rounded-lg p-4">
-                  <div className="text-2xl mb-2">💻</div>
-                  <h3 className="font-semibold text-orange-800">Desktop</h3>
-                  <p className="text-sm text-orange-600">All browsers supported</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Safety Section */}
-            <div className="bg-green-50 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-semibold text-green-800 mb-4 text-center">
-                🛡️ Is YTTMP3.com Safe to Use?
-              </h2>
-
-              <div className="text-center mb-4">
-                <p className="text-green-700 text-lg font-medium">Yes, YTTMP3.com is completely safe.</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-green-800 mb-3">Safety Features</h3>
-                  <ul className="space-y-2 text-green-700">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      No login or Pinterest credentials required
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      No tracking or personal data collection
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Works directly through your browser
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      No malware or viruses
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="text-center">
-                  <div className="bg-white rounded-lg p-4 mb-4">
-                    <p className="text-green-800 font-semibold">Verified Safe</p>
-                    <div className="flex justify-center space-x-4 mt-2">
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Google Safe Browsing</span>
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Norton Safe Web</span>
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Sucuri Scanner</span>
-                    </div>
+            <div className={styles.instructionCard}>
+              <h3 className={styles.featureTitle}>Mobile Instructions</h3>
+              <div className={styles.stepsList}>
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>1</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Open Pinterest App</h4>
+                    <p className={styles.stepDescription}>
+                      Launch the Pinterest app on your iOS or Android device and find the content you want
+                    </p>
                   </div>
-                  <blockquote className="text-green-700 italic">
-                    "I saved a Pinterest cooking video in HD using YTTMP3.com, now I don't need to open the app every time I want to watch it." - Verified User!
-                  </blockquote>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>2</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Share & Copy Link</h4>
+                    <p className={styles.stepDescription}>
+                      Tap the three dots or share icon, then tap Copy Link to copy the pin URL to clipboard
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>3</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Visit Downloader</h4>
+                    <p className={styles.stepDescription}>
+                      Open your mobile browser and navigate to our downloader tool. Paste the URL in the input field
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.stepItem}>
+                  <div className={styles.stepNumber}>4</div>
+                  <div className={styles.stepContent}>
+                    <h4 className={styles.stepTitle}>Save to Device</h4>
+                    <p className={styles.stepDescription}>
+                      Tap Download and the file will be saved to your Photos or Gallery
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* FAQ Section */}
-            <FAQ
-              title="❓ Questions & Answers"
-              items={[
-                {
-                  q: 'Can I download videos from Pinterest?',
-                  a: 'Yes, with YTTMP3.com, you can easily download videos from Pinterest. Just copy the Pinterest video URL, paste it in the form above, and click the Download button. The video will be downloaded to your PC or mobile device.',
-                },
-                {
-                  q: 'How to download Pinterest videos?',
-                  a: '1) Enter the Pinterest video URL that you want to download.<br/>2) Paste the URL into our downloader box.<br/>3) Click the Download button.<br/>4) The download process will start immediately.<br/>5) The video will be saved directly to your system.',
-                },
-                {
-                  q: 'How can I download images from Pinterest?',
-                  a: 'To download images from Pinterest, follow the same steps as for videos. Copy the image URL, paste it into the form, and click Download. The image will be saved to your device.',
-                },
-                {
-                  q: 'Can I download GIFs from Pinterest?',
-                  a: 'Yes, YTTMP3.com supports downloading GIFs from Pinterest. Copy the GIF URL, paste it in the form above, and click the Download button to save the GIF to your device.',
-                },
-                {
-                  q: 'Where are files saved after being downloaded?',
-                  a: 'Downloaded files are typically saved in the "Downloads" folder on your device. You can check your browser\'s download history by pressing CTRL+J on your keyboard.',
-                },
-              ]}
-            />
-
-            <div className="text-center mt-8">
-              <a
-                href="/"
-                className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                Start Downloading Now
-              </a>
+              <div className={styles.proTip}>
+                <strong>Pro Tip:</strong> Use the browser Request Desktop Site option for an enhanced downloading experience
+              </div>
             </div>
           </div>
-        </main>
+        </section>
 
-        <Footer />
-      </div>
-      
-      <Script id="ld-howto" type="application/ld+json">
-        {JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'HowTo',
-          name: 'How to Download Pinterest Videos using YTTMP3.com',
-          step: [
-            { '@type': 'HowToStep', text: 'Open Pinterest and select the content.' },
-            { '@type': 'HowToStep', text: 'Copy the content link.' },
-            { '@type': 'HowToStep', text: 'Paste the link into YTTMP3.com.' },
-            { '@type': 'HowToStep', text: 'Click Download to save the file.' }
-          ]
-        })}
-      </Script>
-    </>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Video Download Quality</h2>
+          <p className={styles.sectionText}>
+            Our tool supports multiple video quality options for Pinterest video downloads
+          </p>
+
+          <div className={styles.featureGrid}>
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Available Quality Options</h3>
+              <ul className={styles.featuresList}>
+                <li><strong>Best Quality:</strong> Highest available resolution with audio</li>
+                <li><strong>720p HD:</strong> Standard HD quality, perfect for most uses</li>
+                <li><strong>480p:</strong> Balanced quality and file size</li>
+                <li><strong>360p:</strong> Smaller file size for quick sharing</li>
+              </ul>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Audio Support</h3>
+              <p className={styles.featureText}>
+                All video downloads include audio when available. Our tool automatically merges video and audio streams.
+              </p>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Format Support</h3>
+              <p className={styles.featureText}>
+                Videos are downloaded in MP4 format. Images are saved in their original format.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Mobile Compatibility</h2>
+          
+          <div className={styles.featureGrid}>
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>iOS (iPhone & iPad)</h3>
+              <ul className={styles.featuresList}>
+                <li>Works in Safari, Chrome, and other browsers</li>
+                <li>Downloads save directly to Photos app</li>
+                <li>Support for iOS 12 and newer versions</li>
+                <li>No app installation required</li>
+              </ul>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Android</h3>
+              <ul className={styles.featuresList}>
+                <li>Compatible with Chrome, Firefox, and Samsung Internet</li>
+                <li>Files save to Downloads or Gallery folder</li>
+                <li>Works on Android 6.0 and above</li>
+                <li>Fully responsive mobile interface</li>
+              </ul>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Tablets</h3>
+              <ul className={styles.featuresList}>
+                <li>Optimized for both iPad and Android tablets</li>
+                <li>Larger screen provides better experience</li>
+                <li>Same functionality as desktop version</li>
+                <li>Touch-friendly interface</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Safety & Privacy</h2>
+          
+          <div className={styles.featureGrid}>
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Secure Downloads</h3>
+              <p className={styles.featureText}>
+                All downloads are processed through secure HTTPS connections. We never store your files on our servers.
+              </p>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>Privacy Protected</h3>
+              <p className={styles.featureText}>
+                We do not track your downloads or collect personal information. Your Pinterest activity remains private.
+              </p>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>No Account Needed</h3>
+              <p className={styles.featureText}>
+                Download Pinterest content without signing in. No registration, no email required.
+              </p>
+            </div>
+
+            <div className={styles.featureCard}>
+              <h3 className={styles.featureTitle}>No Malware</h3>
+              <p className={styles.featureText}>
+                Our tool is 100 percent web-based with no software to install. No risk of viruses or malicious code.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Frequently Asked Questions</h2>
+          <FAQ />
+        </section>
+
+        <section className={styles.ctaSection}>
+          <h2 className={styles.sectionTitle}>Ready to Start Downloading?</h2>
+          <p className={styles.sectionText}>
+            Try our free Pinterest downloader now - no registration required
+          </p>
+          <a href="/" className={styles.ctaButton}>
+            Start Downloading Now
+          </a>
+        </section>
+      </main>
+    </div>
   );
 }

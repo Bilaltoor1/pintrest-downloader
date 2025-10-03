@@ -1,6 +1,4 @@
 import Head from 'next/head';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import Script from 'next/script';
 import styles from '../../components/ContentPage.module.css'
 
@@ -29,8 +27,6 @@ export default function SupportedUrls() {
       </Head>
 
       <div className={styles.wrapper}>
-        <Header />
-
         <main className={styles.main}>
           <div className={styles.card}>
             <h1 className={styles.title}>
@@ -135,8 +131,6 @@ export default function SupportedUrls() {
             </div>
           </div>
         </main>
-
-        <Footer />
       </div>
 
       <Script id="ld-supported-urls" type="application/ld+json">

@@ -5,3 +5,4 @@ werkzeug==3.0.1
 requests>=2.31.0
 gunicorn>=21.2.0
 yt-dlp>=2025.9.26
+ffmpeg-python>=0.2.0

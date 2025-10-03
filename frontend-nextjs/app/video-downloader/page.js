@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import styles from './page.module.css'
 import apiClient from '@/utils/apiClient'
 
@@ -11,6 +9,7 @@ export default function VideoDownloader() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
+  const [warning, setWarning] = useState(null)
   const [selectedFormat, setSelectedFormat] = useState('best')
 
   const handleDownload = async () => {
@@ -21,6 +20,7 @@ export default function VideoDownloader() {
 
     setLoading(true)
     setError(null)
+    setWarning(null)
     setResult(null)
 
     try {
@@ -52,12 +52,18 @@ export default function VideoDownloader() {
 
     try {
       setLoading(true)
+      setWarning(null)
       const response = await apiClient.post('/api/download-video', {
         url: url.trim(),
         format_id: selectedFormat,
       })
 
       if (response.data.success && response.data.download_url) {
+        // Show warning if audio was not merged
+        if (response.data.warning) {
+          setWarning(response.data.warning)
+        }
+        
         // Trigger download
         window.location.href = response.data.download_url
       }
@@ -87,12 +93,11 @@ export default function VideoDownloader() {
     setUrl('')
     setResult(null)
     setError(null)
+    setWarning(null)
   }
 
   return (
     <div className={styles.pageContainer}>
-      <Header />
-      
       <main className={styles.main}>
         {/* Hero Section */}
         <section className={styles.hero}>
@@ -135,6 +140,7 @@ export default function VideoDownloader() {
           </div>
 
           {error && <div className={styles.error}>{error}</div>}
+          {warning && <div className={styles.warning}>{warning}</div>}
         </section>
         
         {/* Results Section */}
@@ -301,8 +307,6 @@ export default function VideoDownloader() {
           </p>
         </section>
       </main>
-
-      <Footer />
     </div>
   )
 }
