@@ -80,6 +80,7 @@ export default function MediaTable({ items = [], limit = 10 }) {
           <td>{index + 1}</td>
           <td>
             <img src={src} alt={getAltText(item)} className={styles.mediaThumb} />
+            <div className={styles.srcBox}>{src}</div>
           </td>
           <td>{getAltText(item)}</td>
           {/* <td>{getResolution(item)}</td> */}
@@ -88,6 +89,12 @@ export default function MediaTable({ items = [], limit = 10 }) {
               <a href={src} target="_blank" rel="noreferrer" className={styles.btnLink}>
                 View
               </a>
+              <button
+                onClick={() => navigator.clipboard?.writeText(src)}
+                className={styles.btnCopy}
+              >
+                Copy Link
+              </button>
               <button
                 onClick={() => handleSingleItemDownload(item, index)}
                 disabled={isDownloading}

@@ -7,12 +7,14 @@ export default function Footer() {
       <div className={styles.footerContent}>
         <div className={styles.footerLinks}>
           <span>2025 Copyright | </span>
-          <span>BILAL TOOR | </span>
+          <span>Powered by BD Network | </span>
           <Link href="/" className={styles.footerLink}>Pinterest Downloader</Link>
           <span> | </span>
           <Link href="/supported-urls" className={styles.footerLink}>Supported URL's</Link>
           <span> | </span>
           <Link href="/terms" className={styles.footerLink}>Terms</Link>
+          <span> | </span>
+          <Link href="/privacy-policy" className={styles.footerLink}>Privacy Policy</Link>
           <span> | </span>
           <Link href="/about-us" className={styles.footerLink}>About Us</Link>
           <span> | </span>

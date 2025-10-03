@@ -1,6 +1,8 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Head from 'next/head';
+import Script from 'next/script';
+import styles from '../../components/ContentPage.module.css'
 // import { useState } from 'react';
 
 
@@ -41,20 +43,20 @@ export default function ContactUs() {
         <link rel="canonical" href="https://yttmp3.com/contact-us" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800">
+      <div className={styles.wrapper}>
         <Header />
 
-        <main className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
-            <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+        <main className={styles.main}>
+          <div className={styles.card}>
+            <h1 className={styles.title}>
               Contact Us - YTTMP3.com
             </h1>
 
-            <div className="text-center mb-8">
-              <p className="text-lg text-gray-600 mb-4">
+            <div className={styles.center} style={{ marginBottom: 16 }}>
+              <p className={styles.lead}>
                 If you have any queries or suggestions, please message us through the contact form below.
               </p>
-              <p className="text-gray-500">
+              <p className={styles.muted}>
                 admin@yttmp3.com
               </p>
             </div>
@@ -136,18 +138,18 @@ export default function ContactUs() {
               </div>
             </form> */}
 
-            <div className="mt-12 bg-gray-50 rounded-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">Other Ways to Reach Us</h2>
-              <div className="grid md:grid-cols-2 gap-6">
+            <div className={styles.box} style={{ background: '#f9fafb', marginTop: 18 }}>
+              <h2 className={styles.sectionTitle}>Other Ways to Reach Us</h2>
+              <div className={styles.gridTwo}>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-700 mb-2">Email Support</h3>
-                  <p className="text-gray-600">admin@yttmp3.com</p>
-                  <p className="text-sm text-gray-500 mt-1">We typically respond within 24 hours</p>
+                  <h3 style={{ fontWeight: 600, marginBottom: 6 }}>Email Support</h3>
+                  <p>admin@yttmp3.com</p>
+                  <p className={styles.muted} style={{ marginTop: 4 }}>We typically respond within 24 hours</p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-700 mb-2">Business Hours</h3>
-                  <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM UTC</p>
-                  <p className="text-sm text-gray-500 mt-1">Weekend support available for urgent issues</p>
+                  <h3 style={{ fontWeight: 600, marginBottom: 6 }}>Business Hours</h3>
+                  <p>Monday - Friday: 9:00 AM - 6:00 PM UTC</p>
+                  <p className={styles.muted} style={{ marginTop: 4 }}>Weekend support available for urgent issues</p>
                 </div>
               </div>
             </div>
@@ -156,6 +158,20 @@ export default function ContactUs() {
 
         <Footer />
       </div>
+
+      <Script id="ld-contact" type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'Contact YTTMP3.com',
+          url: 'https://yttmp3.com/contact-us',
+          mainEntity: {
+            '@type': 'Organization',
+            name: 'YTTMP3.com',
+            email: 'admin@yttmp3.com'
+          }
+        })}
+      </Script>
     </>
   );
 }

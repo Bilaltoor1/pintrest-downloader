@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import Script from 'next/script';
+import styles from '../../components/ContentPage.module.css'
 
 export default function SupportedUrls() {
   const supportedUrls = [
@@ -26,34 +28,34 @@ export default function SupportedUrls() {
         <link rel="canonical" href="https://yttmp3.com/supported-urls" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800">
+      <div className={styles.wrapper}>
         <Header />
 
-        <main className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
-            <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+        <main className={styles.main}>
+          <div className={styles.card}>
+            <h1 className={styles.title}>
               YTTMP3.com Supported URLs
             </h1>
 
-            <div className="text-center mb-8">
-              <p className="text-lg text-gray-600 mb-4">
+            <div className={styles.center} style={{ marginBottom: 16 }}>
+              <p className={styles.lead}>
                 If you have any queries or suggestions, please message us through the contact mail.
               </p>
-              <p className="text-gray-500 mb-6">
+              <p className={styles.muted} style={{ marginBottom: 16 }}>
                 admin@yttmp3.com
               </p>
             </div>
 
-            <div className="bg-green-50 border-l-4 border-green-400 p-6 mb-8">
-              <h2 className="text-xl font-semibold text-green-800 mb-4">✅ Supported URL Formats</h2>
-              <p className="text-green-700 mb-4">
+            <div className={styles.noteGreen} style={{ padding: 16, borderRadius: 12, marginBottom: 16 }}>
+              <h2 className={styles.sectionTitle}>✅ Supported URL Formats</h2>
+              <p>
                 YTTMP3.com supports all standard Pinterest URLs. Here are the formats we accept:
               </p>
 
-              <div className="space-y-3">
+              <div style={{ display: 'grid', gap: 8 }}>
                 {supportedUrls.map((url, index) => (
-                  <div key={index} className="bg-white rounded-lg p-4 border border-green-200">
-                    <code className="text-sm text-gray-800 font-mono break-all">
+                  <div key={index} className={styles.box}>
+                    <code className={styles.codeBox}>
                       {url}
                     </code>
                   </div>
@@ -61,51 +63,51 @@ export default function SupportedUrls() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-blue-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-blue-800 mb-3">How to Get Pinterest URLs</h3>
-                <div className="space-y-3 text-sm text-blue-700">
+            <div className={styles.gridTwo} style={{ marginBottom: 16 }}>
+              <div className={styles.noteBlue} style={{ padding: 16, borderRadius: 12 }}>
+                <h3 className={styles.sectionTitle}>How to Get Pinterest URLs</h3>
+                <div style={{ display: 'grid', gap: 8 }}>
                   <div className="flex items-start space-x-2">
-                    <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                    <span className={styles.pill}>1</span>
                     <p>Open Pinterest in your browser or app</p>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                    <span className={styles.pill}>2</span>
                     <p>Find the pin you want to download</p>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                    <span className={styles.pill}>3</span>
                     <p>Click the three dots (⋯) menu</p>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">4</span>
+                    <span className={styles.pill}>4</span>
                     <p>Select "Copy Link" or "Copy Pin Link"</p>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <span className="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">5</span>
+                    <span className={styles.pill}>5</span>
                     <p>Paste the URL in our downloader</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-purple-50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-purple-800 mb-3">URL Examples</h3>
-                <div className="space-y-3">
-                  <div className="bg-white rounded p-3 border">
-                    <p className="text-xs text-gray-500 mb-1">Full Pinterest URL</p>
-                    <code className="text-sm text-purple-700 break-all">
+              <div className={styles.noteYellow} style={{ padding: 16, borderRadius: 12 }}>
+                <h3 className={styles.sectionTitle}>URL Examples</h3>
+                <div style={{ display: 'grid', gap: 8 }}>
+                  <div className={styles.box}>
+                    <p className={styles.muted} style={{ marginBottom: 6 }}>Full Pinterest URL</p>
+                    <code className={styles.codeBox}>
                       https://www.pinterest.com/pin/795377984215165340/
                     </code>
                   </div>
-                  <div className="bg-white rounded p-3 border">
-                    <p className="text-xs text-gray-500 mb-1">Short Pinterest Link</p>
-                    <code className="text-sm text-purple-700 break-all">
+                  <div className={styles.box}>
+                    <p className={styles.muted} style={{ marginBottom: 6 }}>Short Pinterest Link</p>
+                    <code className={styles.codeBox}>
                       https://pin.it/60m8aXr85
                     </code>
                   </div>
-                  <div className="bg-white rounded p-3 border">
-                    <p className="text-xs text-gray-500 mb-1">Mobile Pinterest URL</p>
-                    <code className="text-sm text-purple-700 break-all">
+                  <div className={styles.box}>
+                    <p className={styles.muted} style={{ marginBottom: 6 }}>Mobile Pinterest URL</p>
+                    <code className={styles.codeBox}>
                       https://pinterest.com/pin/1234567890123456789/
                     </code>
                   </div>
@@ -113,9 +115,9 @@ export default function SupportedUrls() {
               </div>
             </div>
 
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6">
-              <h3 className="text-lg font-semibold text-yellow-800 mb-3">Important Notes</h3>
-              <ul className="list-disc list-inside text-yellow-700 space-y-2">
+            <div className={styles.noteYellow} style={{ padding: 16, borderRadius: 12 }}>
+              <h3 className={styles.sectionTitle}>Important Notes</h3>
+              <ul className={styles.listDisc} style={{ margin: 0 }}>
                 <li>All Pinterest URLs are supported as long as they point to valid pins</li>
                 <li>Private pins may not be downloadable (Pinterest restrictions)</li>
                 <li>Some content may be region-locked by Pinterest</li>
@@ -123,10 +125,10 @@ export default function SupportedUrls() {
               </ul>
             </div>
 
-            <div className="text-center mt-8">
+            <div className={styles.center} style={{ marginTop: 16 }}>
               <a
                 href="/"
-                className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105"
+                className={styles.btnPrimary}
               >
                 Try Our Downloader Now
               </a>
@@ -136,6 +138,16 @@ export default function SupportedUrls() {
 
         <Footer />
       </div>
+
+      <Script id="ld-supported-urls" type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Supported Pinterest URL Formats',
+          url: 'https://yttmp3.com/supported-urls',
+          description: 'List of supported Pinterest URL formats for YTTMP3.com Pinterest downloader.'
+        })}
+      </Script>
     </>
   );
 }

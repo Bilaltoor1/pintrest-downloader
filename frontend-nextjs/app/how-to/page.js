@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import FAQ from '../../components/FAQ';
+import Script from 'next/script';
 
 export default function HowTo() {
   return (
@@ -301,44 +303,31 @@ export default function HowTo() {
             </div>
 
             {/* FAQ Section */}
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-                ❓ Questions & Answers
-              </h2>
-
-              <div className="space-y-4">
-                <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Can I download videos from Pinterest?</h3>
-                  <p className="text-gray-600">Yes, with YTTMP3.com, you can easily download videos from Pinterest. Just copy the Pinterest video URL, paste it in the form above, and click the Download button. The video will be downloaded to your PC or mobile device.</p>
-                </div>
-
-                <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">How to download Pinterest videos?</h3>
-                  <div className="text-gray-600 space-y-1">
-                    <p>1. Enter the Pinterest video URL that you want to download.</p>
-                    <p>2. Paste the URL into our downloader box.</p>
-                    <p>3. Click the Download button.</p>
-                    <p>4. The download process will start immediately.</p>
-                    <p>5. The video will be saved directly to your system.</p>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">How can I download images from Pinterest?</h3>
-                  <p className="text-gray-600">To download images from Pinterest, follow the same steps as for videos. Copy the image URL, paste it into the form, and click Download. The image will be saved to your device.</p>
-                </div>
-
-                <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Can I download GIFs from Pinterest?</h3>
-                  <p className="text-gray-600">Yes, YTTMP3.com supports downloading GIFs from Pinterest. Copy the GIF URL, paste it in the form above, and click the Download button to save the GIF to your device.</p>
-                </div>
-
-                <div className="bg-white rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">Where are files saved after being downloaded?</h3>
-                  <p className="text-gray-600">Downloaded files are typically saved in the "Downloads" folder on your device. You can check your browser's download history by pressing CTRL+J on your keyboard.</p>
-                </div>
-              </div>
-            </div>
+            <FAQ
+              title="❓ Questions & Answers"
+              items={[
+                {
+                  q: 'Can I download videos from Pinterest?',
+                  a: 'Yes, with YTTMP3.com, you can easily download videos from Pinterest. Just copy the Pinterest video URL, paste it in the form above, and click the Download button. The video will be downloaded to your PC or mobile device.',
+                },
+                {
+                  q: 'How to download Pinterest videos?',
+                  a: '1) Enter the Pinterest video URL that you want to download.<br/>2) Paste the URL into our downloader box.<br/>3) Click the Download button.<br/>4) The download process will start immediately.<br/>5) The video will be saved directly to your system.',
+                },
+                {
+                  q: 'How can I download images from Pinterest?',
+                  a: 'To download images from Pinterest, follow the same steps as for videos. Copy the image URL, paste it into the form, and click Download. The image will be saved to your device.',
+                },
+                {
+                  q: 'Can I download GIFs from Pinterest?',
+                  a: 'Yes, YTTMP3.com supports downloading GIFs from Pinterest. Copy the GIF URL, paste it in the form above, and click the Download button to save the GIF to your device.',
+                },
+                {
+                  q: 'Where are files saved after being downloaded?',
+                  a: 'Downloaded files are typically saved in the "Downloads" folder on your device. You can check your browser\'s download history by pressing CTRL+J on your keyboard.',
+                },
+              ]}
+            />
 
             <div className="text-center mt-8">
               <a
@@ -353,6 +342,19 @@ export default function HowTo() {
 
         <Footer />
       </div>
+      <Script id="ld-howto" type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'HowTo',
+          name: 'How to Download Pinterest Videos using YTTMP3.com',
+          step: [
+            { '@type': 'HowToStep', text: 'Open Pinterest and select the content.' },
+            { '@type': 'HowToStep', text: 'Copy the content link.' },
+            { '@type': 'HowToStep', text: 'Paste the link into YTTMP3.com.' },
+            { '@type': 'HowToStep', text: 'Click Download to save the file.' }
+          ]
+        })}
+      </Script>
     </>
   );
 }

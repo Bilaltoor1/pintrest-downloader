@@ -1,0 +1,103 @@
+.wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 28px;
+}
+
+@media (min-width: 640px) {
+  .card { padding: 36px; }
+}
+
+.title {
+  font-size: clamp(2rem, 1.4rem + 1.5vw, 2.5rem);
+  font-weight: 800;
+  color: #1f2937; /* gray-800 */
+  text-align: center;
+  margin: 0 0 24px;
+}
+
+.lead {
+  font-size: 1.125rem;
+  color: #374151; /* gray-700 */
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.muted { color: #6b7280; /* gray-500 */ }
+.center { text-align: center; }
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 20px 0 12px;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 768px) {
+  .gridTwo { grid-template-columns: repeat(2, 1fr); }
+}
+
+.gridThree {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .gridThree { grid-template-columns: repeat(3, 1fr); }
+}
+
+.box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.noteBlue { background: #eff6ff; border-left: 4px solid #60a5fa; }
+.noteGreen { background: #ecfdf5; border-left: 4px solid #34d399; }
+.noteYellow { background: #fffbeb; border-left: 4px solid #f59e0b; }
+.noteRed { background: #fef2f2; border-left: 4px solid #f87171; }
+
+.pill {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #6366f1; color: #fff; display: inline-flex;
+  align-items: center; justify-content: center; font-weight: 700; margin-right: 8px;
+}
+
+.inlineCode { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+.codeBox { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px; font-family: ui-monospace, monospace; font-size: 0.9rem; color: #1f2937; overflow-wrap: anywhere; }
+
+.btnPrimary {
+  display: inline-block;
+  background: #7c3aed;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 10px;
+  transition: transform .2s ease, background .2s ease;
+}
+.btnPrimary:hover { background: #6d28d9; transform: translateY(-1px); }
+
+.listDisc { list-style: disc inside; color: #374151; }
+.listDec { list-style: decimal inside; color: #1f2937; }
+
+.spacer { height: 24px; }
