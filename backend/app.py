@@ -8,6 +8,7 @@ from datetime import datetime
 import zipfile
 from werkzeug.utils import secure_filename
 import requests
+import yt_dlp
 
 app = Flask(__name__)
 # Enable CORS for all routes with explicit configuration
@@ -558,6 +559,174 @@ def cookies_status():
     return jsonify({
         'has_cookies': os.path.exists(COOKIES_FILE)
     })
+
+@app.route('/api/scrape-video', methods=['POST'])
+def scrape_video():
+    """Scrape Pinterest video URL and return video information using yt-dlp"""
+    try:
+        data = request.json
+        url = data.get('url')
+        num = int(data.get('num', 1))
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Normalize URL
+        url = normalize_url(url)
+        
+        # Configure yt-dlp options
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+        }
+        
+        videos = []
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                info = ydl.extract_info(url, download=False)
+                
+                if info:
+                    # Extract video information
+                    video_data = {
+                        'id': info.get('id', ''),
+                        'title': info.get('title', 'Pinterest Video'),
+                        'description': info.get('description', ''),
+                        'thumbnail': info.get('thumbnail', ''),
+                        'duration': info.get('duration', 0),
+                        'url': url,
+                        'formats': []
+                    }
+                    
+                    # Get available formats
+                    formats = info.get('formats', [])
+                    seen_resolutions = set()
+                    
+                    for fmt in formats:
+                        if fmt.get('vcodec') != 'none':  # Only video formats
+                            height = fmt.get('height', 0)
+                            width = fmt.get('width', 0)
+                            format_id = fmt.get('format_id', '')
+                            ext = fmt.get('ext', 'mp4')
+                            filesize = fmt.get('filesize', 0)
+                            
+                            if height and width:
+                                resolution_key = f"{width}x{height}"
+                                if resolution_key not in seen_resolutions:
+                                    seen_resolutions.add(resolution_key)
+                                    video_data['formats'].append({
+                                        'format_id': format_id,
+                                        'ext': ext,
+                                        'width': width,
+                                        'height': height,
+                                        'filesize': filesize,
+                                        'resolution': resolution_key,
+                                        'quality': f"{height}p"
+                                    })
+                    
+                    # Sort formats by height (quality) descending
+                    video_data['formats'].sort(key=lambda x: x['height'], reverse=True)
+                    
+                    videos.append(video_data)
+            
+            except Exception as e:
+                return jsonify({'error': f'Failed to extract video info: {str(e)}'}), 500
+        
+        return jsonify({
+            'success': True,
+            'count': len(videos),
+            'media': videos
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-video', methods=['POST'])
+def download_video():
+    """Download Pinterest video using yt-dlp"""
+    try:
+        data = request.json
+        url = data.get('url')
+        format_id = data.get('format_id', 'best')
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Normalize URL
+        url = normalize_url(url)
+        
+        # Create unique filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        output_template = os.path.join(DOWNLOAD_FOLDER, f'pinterest_video_{timestamp}.%(ext)s')
+        
+        # Configure yt-dlp options
+        ydl_opts = {
+            'format': format_id if format_id != 'best' else 'best',
+            'outtmpl': output_template,
+            'quiet': True,
+            'no_warnings': True,
+        }
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                info = ydl.extract_info(url, download=True)
+                
+                # Get the actual downloaded filename
+                downloaded_file = ydl.prepare_filename(info)
+                
+                if os.path.exists(downloaded_file):
+                    filename = os.path.basename(downloaded_file)
+                    
+                    return jsonify({
+                        'success': True,
+                        'download_url': f'/api/download-video-file/{filename}',
+                        'filename': filename
+                    })
+                else:
+                    return jsonify({'error': 'Download failed'}), 500
+                    
+            except Exception as e:
+                return jsonify({'error': f'Failed to download video: {str(e)}'}), 500
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-video-file/<filename>', methods=['GET'])
+def download_video_file(filename):
+    """Serve downloaded video file"""
+    try:
+        file_path = os.path.join(DOWNLOAD_FOLDER, secure_filename(filename))
+        if os.path.exists(file_path):
+            # Determine MIME type
+            mime_types = {
+                '.mp4': 'video/mp4',
+                '.webm': 'video/webm',
+                '.mkv': 'video/x-matroska',
+                '.mov': 'video/quicktime',
+                '.avi': 'video/x-msvideo'
+            }
+            
+            file_ext = os.path.splitext(filename)[1].lower()
+            mimetype = mime_types.get(file_ext, 'video/mp4')
+            
+            def cleanup_after_send():
+                try:
+                    os.remove(file_path)
+                except:
+                    pass
+            
+            # Schedule file cleanup after sending
+            import threading
+            threading.Timer(5.0, cleanup_after_send).start()
+            
+            response = send_file(file_path, as_attachment=True, download_name=filename, mimetype=mimetype)
+            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+            return response
+        else:
+            return jsonify({'error': 'File not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -11,9 +11,7 @@ export default function VideoDownloader() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
-  const [mode, setMode] = useState('single') // 'single' or 'bulk'
-  const [bulkCount, setBulkCount] = useState('10')
-  const [downloadingZip, setDownloadingZip] = useState(false)
+  const [selectedFormat, setSelectedFormat] = useState('best')
 
   const handleDownload = async () => {
     if (!url.trim()) {
@@ -26,68 +24,47 @@ export default function VideoDownloader() {
     setResult(null)
 
     try {
-      const count = mode === 'single' ? 1 : parseInt(bulkCount) || 10
-      const response = await apiClient.post('/api/scrape', {
+      const response = await apiClient.post('/api/scrape-video', {
         url: url.trim(),
-        num: count,
+        num: 1,
       })
 
       setResult(response.data)
-      if (!response.data?.count) {
-        setError('No videos found for this pin.')
+      if (!response.data?.count || response.data.count === 0) {
+        setError('No video found for this pin.')
+      } else if (response.data.media[0].formats.length > 0) {
+        // Set default format to best quality
+        setSelectedFormat('best')
       }
     } catch (error) {
       setResult(null)
-      setError(error.response?.data?.error || 'Unable to fetch videos.')
+      setError(error.response?.data?.error || 'Unable to fetch video.')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleDownloadZip = async () => {
+  const handleDownloadVideo = async () => {
     if (!url.trim()) {
       setError('Please enter a Pinterest URL.')
       return
     }
 
-    setDownloadingZip(true)
-    setError(null)
-
     try {
-      const count = parseInt(bulkCount) || 10
-      const response = await apiClient.post('/api/download', {
+      setLoading(true)
+      const response = await apiClient.post('/api/download-video', {
         url: url.trim(),
-        num: count,
-        download_video: true,
-        caption: 'none',
+        format_id: selectedFormat,
       })
 
       if (response.data.success && response.data.download_url) {
-        // Trigger download by navigating to the URL
-        const downloadUrl = response.data.download_url
-        window.location.href = downloadUrl
+        // Trigger download
+        window.location.href = response.data.download_url
       }
     } catch (error) {
-      setError(error.response?.data?.error || 'Unable to download ZIP.')
+      setError(error.response?.data?.error || 'Unable to download video.')
     } finally {
-      setDownloadingZip(false)
-    }
-  }
-
-  const handleDownloadMedia = async (mediaUrl, fileName) => {
-    try {
-      const response = await apiClient.post('/api/download-direct', { media_url: mediaUrl }, { responseType: 'blob' })
-      const blob = response.data
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = fileName || `pinterest_media_${Date.now()}.mp4`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Download failed:', error)
+      setLoading(false)
     }
   }
 
@@ -154,29 +131,6 @@ export default function VideoDownloader() {
                   Paste
                 </button>
               )}
-              
-              <div className={styles.modeSelector}>
-                <select 
-                  className={styles.modeDropdown}
-                  value={mode}
-                  onChange={(e) => setMode(e.target.value)}
-                >
-                  <option value="single">Single</option>
-                  <option value="bulk">Bulk</option>
-                </select>
-                
-                {mode === 'bulk' && (
-                  <input
-                    type="number"
-                    className={styles.countInput}
-                    placeholder="Count"
-                    value={bulkCount}
-                    onChange={(e) => setBulkCount(e.target.value)}
-                    min="1"
-                    max="100"
-                  />
-                )}
-              </div>
             </div>
           </div>
 
@@ -187,64 +141,54 @@ export default function VideoDownloader() {
         {result && result.media && result.media.length > 0 && (
           <section className={styles.resultsSection}>
             <div className={styles.resultsContainer}>
-              <h2 className={styles.resultsTitle}>
-                {result.count === 1 ? 'Downloaded Video' : `${result.count} Videos Found`}
-              </h2>
+              <h2 className={styles.resultsTitle}>Video Ready to Download</h2>
               
-              {result.count === 1 ? (
-                // Single Video - Centered
-                <div className={styles.singleImageWrapper}>
-                  <img 
-                    src={result.media[0].src} 
-                    alt={result.media[0].alt || 'Pinterest Video'}
-                    className={styles.singleImage}
-                  />
-                  <button
-                    onClick={() => handleDownloadMedia(
-                      result.media[0].src, 
-                      `pinterest_video_${result.media[0].id}.mp4`
-                    )}
-                    className={styles.downloadLink}
-                  >
-                    Download Video ({result.media[0].resolution.x}x{result.media[0].resolution.y})
-                  </button>
+              <div className={styles.singleImageWrapper}>
+                <img 
+                  src={result.media[0].thumbnail} 
+                  alt={result.media[0].title || 'Pinterest Video'}
+                  className={styles.singleImage}
+                />
+                
+                <div className={styles.videoInfo}>
+                  <h3 className={styles.videoTitle}>{result.media[0].title || 'Pinterest Video'}</h3>
+                  {result.media[0].duration > 0 && (
+                    <p className={styles.videoDuration}>
+                      Duration: {Math.floor(result.media[0].duration / 60)}:{(result.media[0].duration % 60).toString().padStart(2, '0')}
+                    </p>
+                  )}
                 </div>
-              ) : (
-                // Multiple Videos - Grid
-                <>
-                  <div className={styles.imageGrid}>
-                    {result.media.map((video, idx) => (
-                      <div key={idx} className={styles.imageCard}>
-                        <img 
-                          src={video.src} 
-                          alt={video.alt || `Pinterest Video ${idx + 1}`}
-                          className={styles.gridImage}
-                        />
-                        <button
-                          onClick={() => handleDownloadMedia(
-                            video.src, 
-                            `pinterest_video_${video.id || idx}.mp4`
-                          )}
-                          className={styles.downloadLinkSmall}
-                        >
-                          Download ({video.resolution.x}x{video.resolution.y})
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {/* Bulk Download ZIP Button */}
-                  <div className={styles.bulkDownloadWrapper}>
-                    <button
-                      onClick={handleDownloadZip}
-                      disabled={downloadingZip}
-                      className={styles.downloadZipBtn}
+
+                {result.media[0].formats && result.media[0].formats.length > 0 && (
+                  <div className={styles.formatSelector}>
+                    <label htmlFor="quality-select" className={styles.formatLabel}>
+                      Select Quality:
+                    </label>
+                    <select
+                      id="quality-select"
+                      className={styles.qualityDropdown}
+                      value={selectedFormat}
+                      onChange={(e) => setSelectedFormat(e.target.value)}
                     >
-                      {downloadingZip ? '⏳ Creating ZIP...' : '📦 Download All as ZIP'}
-                    </button>
+                      <option value="best">Best Quality</option>
+                      {result.media[0].formats.map((format, idx) => (
+                        <option key={idx} value={format.format_id}>
+                          {format.quality} ({format.width}x{format.height})
+                          {format.filesize ? ` - ${(format.filesize / 1024 / 1024).toFixed(1)}MB` : ''}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </>
-              )}
+                )}
+
+                <button
+                  onClick={handleDownloadVideo}
+                  className={styles.downloadLink}
+                  disabled={loading}
+                >
+                  {loading ? 'Downloading...' : 'Download Video'}
+                </button>
+              </div>
             </div>
           </section>
         )}

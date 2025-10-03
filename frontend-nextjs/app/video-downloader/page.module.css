@@ -239,6 +239,70 @@
     box-shadow: 0 4px 12px rgba(230, 0, 35, 0.3);
 }
 
+.downloadLink:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Video Info */
+.videoInfo {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.videoTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.videoDuration {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Format Selector */
+.formatSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 1rem 0;
+}
+
+.formatLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+}
+
+.qualityDropdown {
+  background: white;
+  color: #333;
+  border: 2px solid #e0e0e0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.qualityDropdown:hover {
+  border-color: #e60023;
+}
+
+.qualityDropdown:focus {
+  border-color: #e60023;
+  box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.1);
+}
+
 /* Grid for multiple videos */
 .imageGrid {
   display: grid;
