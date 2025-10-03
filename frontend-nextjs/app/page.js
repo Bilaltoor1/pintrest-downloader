@@ -1,5 +1,5 @@
-import PinterestDownloader from '../components/PinterestDownloader'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return <PinterestDownloader />
+  redirect('/image-downloader')
 }

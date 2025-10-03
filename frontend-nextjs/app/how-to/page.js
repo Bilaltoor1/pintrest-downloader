@@ -1,26 +1,18 @@
-import Head from 'next/head';
+import Script from 'next/script';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import FAQ from '../../components/FAQ';
-import Script from 'next/script';
+import styles from './page.module.css';
+
+export const metadata = {
+  title: 'How to Download Pinterest Videos - YTTMP3.com',
+  description: 'Learn how to download Pinterest videos, images, and GIFs using YTTMP3.com. Step-by-step guide for mobile app and desktop with video tutorial.',
+}
 
 export default function HowTo() {
   return (
     <>
-      <Head>
-        <title>How to Download Pinterest Videos - YTTMP3.com</title>
-        <meta name="description" content="Learn how to download Pinterest videos, images, and GIFs using YTTMP3.com. Step-by-step guide for mobile app and desktop with video tutorial." />
-        <meta name="keywords" content="how to download pinterest videos, pinterest downloader tutorial, download pinterest images, pinterest gif download, mobile download guide" />
-        <meta property="og:title" content="How to Download Pinterest Videos - YTTMP3.com" />
-        <meta property="og:description" content="Learn how to download Pinterest videos, images, and GIFs using YTTMP3.com. Step-by-step guide for mobile and desktop." />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="How to Download Pinterest Videos - YTTMP3.com" />
-        <meta name="twitter:description" content="Learn how to download Pinterest videos, images, and GIFs using YTTMP3.com." />
-        <link rel="canonical" href="https://yttmp3.com/how-to" />
-      </Head>
-
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800">
+      <div className={styles.pageContainer}>
         <Header />
 
         <main className="container mx-auto px-4 py-8">
@@ -342,6 +334,7 @@ export default function HowTo() {
 
         <Footer />
       </div>
+      
       <Script id="ld-howto" type="application/ld+json">
         {JSON.stringify({
           '@context': 'https://schema.org',

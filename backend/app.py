@@ -402,9 +402,17 @@ def download_media_url_direct(media_url):
     except Exception as e:
         return jsonify({'error': f'Failed to download media: {str(e)}'}), 500
 
-@app.route('/api/download-direct', methods=['POST'])
+@app.route('/api/download-direct', methods=['POST', 'OPTIONS'])
 def download_direct():
     """Download media URL directly and return as blob"""
+    if request.method == 'OPTIONS':
+        # Handle CORS preflight request
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+    
     try:
         data = request.json
         media_url = data.get('media_url')
@@ -446,13 +454,19 @@ def download_direct():
             for chunk in response.iter_content(chunk_size=8192):
                 yield chunk
         
-        return Response(
+        # Create response with explicit CORS headers
+        flask_response = Response(
             generate(),
             mimetype=content_type,
             headers={
-                'Content-Disposition': f'attachment; filename="{original_filename}"'
+                'Content-Disposition': f'attachment; filename="{original_filename}"',
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
             }
         )
+        
+        return flask_response
         
     except Exception as e:
         return jsonify({'error': f'Failed to download media: {str(e)}'}), 500
@@ -500,7 +514,10 @@ def download_file(filename):
     try:
         file_path = os.path.join(DOWNLOAD_FOLDER, secure_filename(filename))
         if os.path.exists(file_path):
-            return send_file(file_path, as_attachment=True, download_name=filename)
+            response = send_file(file_path, as_attachment=True, download_name=filename)
+            # Add CORS headers
+            response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+            return response
         else:
             return jsonify({'error': 'File not found'}), 404
     except Exception as e:

@@ -8,17 +8,15 @@ export default function Footer() {
         <div className={styles.footerLinks}>
           <span>2025 Copyright | </span>
           <span>Powered by BD Network | </span>
-          <Link href="/" className={styles.footerLink}>Pinterest Downloader</Link>
+          <Link href="/video-downloader" className={styles.footerLink}>Video Downloader</Link>
           <span> | </span>
-          <Link href="/supported-urls" className={styles.footerLink}>Supported URL's</Link>
+          <Link href="/image-downloader" className={styles.footerLink}>Image Downloader</Link>
+          <span> | </span>
+          <Link href="/how-to" className={styles.footerLink}>How To</Link>
           <span> | </span>
           <Link href="/terms" className={styles.footerLink}>Terms</Link>
           <span> | </span>
           <Link href="/privacy-policy" className={styles.footerLink}>Privacy Policy</Link>
-          <span> | </span>
-          <Link href="/about-us" className={styles.footerLink}>About Us</Link>
-          <span> | </span>
-          <Link href="/contact-us" className={styles.footerLink}>Contact Us</Link>
         </div>
 
         {/* <div className={styles.footerBottom}>

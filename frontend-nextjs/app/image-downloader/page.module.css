@@ -1,0 +1,485 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+}
+
+/* Hero Section */
+.hero {
+  background: #833AB4;
+  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 100%, rgba(252, 176, 69, 1) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.mainTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: white;
+  margin: 0 auto 2.5rem auto;
+  max-width: 700px;
+  line-height: 1.6;
+  opacity: 0.95;
+  font-weight: bold;
+}
+
+.downloadSection {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.inputWrapper {
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.urlInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  color: #333;
+  border-radius: 50px;
+}
+
+.urlInput::placeholder {
+  color: #999;
+}
+
+.controlsWrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.downloadBtn {
+  background: #0084ff;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  white-space: nowrap;
+  border-radius: 50px;
+}
+
+.downloadBtn:hover {
+  background: #0066cc;
+}
+
+.downloadBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.pasteBtn,
+.clearBtn {
+  background: #151515;
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+
+.modeSelector {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.modeDropdown {
+  background: white;
+  color: #333;
+  border: none;
+  padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+.countInput {
+  width: 100px;
+  background: white;
+  color: #333;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+  text-align: center;
+}
+
+.error {
+  color: #ffeb3b;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Results Section */
+.resultsSection {
+  background: #f9f9f9;
+  padding: 3rem 2rem;
+  min-height: 400px;
+}
+
+.resultsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.resultsTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Single Image Display */
+.singleImageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.singleImage {
+  max-width: 500px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.downloadLink {
+  background: #833AB4;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-align: center;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.downloadLink:hover {
+  background: #6a2d91;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
+}
+
+/* Bulk Images Grid */
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.imageCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.imageCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gridImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.downloadLinkSmall {
+  display: block;
+  background: #833AB4;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.downloadLinkSmall:hover {
+  background: #6a2d91;
+}
+
+/* Bulk Download Button */
+.bulkDownloadWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.downloadZipBtn {
+  background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(235, 68, 68, 1) 50%, rgba(252, 69, 164, 1) 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(131, 58, 180, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.downloadZipBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(131, 58, 180, 0.4);
+}
+
+.downloadZipBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Content Sections */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  background: white;
+}
+
+.section:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.3;
+}
+
+.sectionText {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+}
+
+/* Feature Grid */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.featureCard {
+  background: #f5f5f5;
+  padding: 2rem;
+  border-radius: 12px;
+  transition: transform 0.3s;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.featureTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #833AB4;
+  margin: 0 0 1rem 0;
+}
+
+.featureText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+
+/* Steps Grid */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stepCard {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid #f0f0f0;
+  transition: border-color 0.3s;
+}
+
+.stepCard:hover {
+  border-color: #833AB4;
+}
+
+.stepTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #833AB4;
+  margin: 0 0 1rem 0;
+}
+
+.stepText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+
+/* Lists */
+.stepsList,
+.featuresList {
+  margin: 1.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.stepsList li,
+.featuresList li {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+.featuresList {
+  list-style-type: disc;
+}
+
+.stepsList {
+  list-style-type: decimal;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1rem;
+  }
+
+  .mainTitle {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .inputWrapper {
+    border-radius: 12px;
+  }
+
+  .urlInput {
+    padding: 1rem;
+  }
+
+  .controlsWrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .downloadBtn,
+  .pasteBtn,
+  .clearBtn,
+  .modeDropdown {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+  }
+
+  .modeSelector {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .countInput {
+    width: 100%;
+  }
+
+  .section {
+    padding: 2rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .featureGrid,
+  .stepsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .singleImage {
+    max-width: 100%;
+  }
+}
