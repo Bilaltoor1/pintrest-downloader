@@ -670,7 +670,7 @@ def scrape_video():
 
 @app.route('/api/download-video', methods=['POST'])
 def download_video():
-    """Download Pinterest video using yt-dlp with audio merged using FFmpeg"""
+    """Download Pinterest video only (no audio merge)."""
     try:
         data = request.json
         url = data.get('url')
