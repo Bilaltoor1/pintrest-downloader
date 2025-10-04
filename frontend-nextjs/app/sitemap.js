@@ -3,6 +3,7 @@ export default async function sitemap() {
   const routes = [
     '',
     '/image-downloader',
+    '/twitter-downloader',
     '/how-to',
     '/about-us',
     '/contact-us',

@@ -12,6 +12,8 @@ export default function Footer() {
           <span> | </span>
           <Link href="/image-downloader" className={styles.footerLink}>Image Downloader</Link>
           <span> | </span>
+          <Link href="/twitter-downloader" className={styles.footerLink}>Twitter Downloader</Link>
+          <span> | </span>
           <Link href="/how-to" className={styles.footerLink}>How To</Link>
           <span> | </span>
           <Link href="/about-us" className={styles.footerLink}>About Us</Link>

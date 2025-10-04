@@ -823,5 +823,215 @@ def download_video_file(filename):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/scrape-twitter', methods=['POST'])
+def scrape_twitter():
+    """Scrape Twitter video metadata using yt-dlp"""
+    try:
+        data = request.get_json()
+        url = data.get('url', '').strip()
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Configure yt-dlp options for metadata extraction
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+        }
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            
+            # Extract formats
+            formats = []
+            if 'formats' in info:
+                for fmt in info['formats']:
+                    if fmt.get('vcodec') != 'none':  # Only video formats
+                        formats.append({
+                            'format_id': fmt.get('format_id', ''),
+                            'quality': fmt.get('format_note', 'unknown'),
+                            'width': fmt.get('width', 0),
+                            'height': fmt.get('height', 0),
+                            'filesize': fmt.get('filesize', 0),
+                            'ext': fmt.get('ext', 'mp4')
+                        })
+            
+            # Sort formats by quality (height)
+            formats.sort(key=lambda x: x['height'], reverse=True)
+            
+            media = [{
+                'title': info.get('title', 'Twitter Video'),
+                'thumbnail': info.get('thumbnail', ''),
+                'duration': info.get('duration', 0),
+                'formats': formats
+            }]
+            
+            return jsonify({
+                'count': 1,
+                'media': media
+            })
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-twitter', methods=['POST'])
+def download_twitter():
+    """Download Twitter video using yt-dlp"""
+    try:
+        data = request.get_json()
+        url = data.get('url', '').strip()
+        format_id = data.get('format_id', 'best')
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Generate timestamp for unique filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # Configure yt-dlp download options
+        ydl_opts = {
+            'format': format_id if format_id != 'best' else 'best[ext=mp4]/best',
+            'outtmpl': os.path.join(DOWNLOAD_FOLDER, f'twitter_{timestamp}.%(ext)s'),
+            'quiet': True,
+            'no_warnings': True,
+        }
+        
+        downloaded_file = None
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            
+            # Find the downloaded file
+            expected_ext = info.get('ext', 'mp4')
+            expected_filename = f'twitter_{timestamp}.{expected_ext}'
+            expected_path = os.path.join(DOWNLOAD_FOLDER, expected_filename)
+            
+            if os.path.exists(expected_path):
+                downloaded_file = expected_filename
+            else:
+                # Check for any file with the timestamp
+                files_in_folder = os.listdir(DOWNLOAD_FOLDER)
+                matching_files = [f for f in files_in_folder if f'twitter_{timestamp}' in f]
+                if matching_files:
+                    downloaded_file = matching_files[0]
+        
+        if downloaded_file and os.path.exists(os.path.join(DOWNLOAD_FOLDER, downloaded_file)):
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download-video-file/{downloaded_file}',
+                'filename': downloaded_file
+            })
+        else:
+            return jsonify({'error': 'Download failed - file not found'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/scrape-tiktok', methods=['POST'])
+def scrape_tiktok():
+    """Scrape TikTok video metadata using yt-dlp"""
+    try:
+        data = request.get_json()
+        url = data.get('url', '').strip()
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Configure yt-dlp options for metadata extraction
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': False,
+        }
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            
+            # Extract formats
+            formats = []
+            if 'formats' in info:
+                for fmt in info['formats']:
+                    if fmt.get('vcodec') != 'none':  # Only video formats
+                        formats.append({
+                            'format_id': fmt.get('format_id', ''),
+                            'quality': fmt.get('format_note', 'unknown'),
+                            'width': fmt.get('width', 0),
+                            'height': fmt.get('height', 0),
+                            'filesize': fmt.get('filesize', 0),
+                            'ext': fmt.get('ext', 'mp4')
+                        })
+            
+            # Sort formats by quality (height)
+            formats.sort(key=lambda x: x['height'], reverse=True)
+            
+            media = [{
+                'title': info.get('title', 'TikTok Video'),
+                'thumbnail': info.get('thumbnail', ''),
+                'duration': info.get('duration', 0),
+                'formats': formats
+            }]
+            
+            return jsonify({
+                'count': 1,
+                'media': media
+            })
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-tiktok', methods=['POST'])
+def download_tiktok():
+    """Download TikTok video using yt-dlp"""
+    try:
+        data = request.get_json()
+        url = data.get('url', '').strip()
+        format_id = data.get('format_id', 'best')
+        
+        if not url:
+            return jsonify({'error': 'URL is required'}), 400
+        
+        # Generate timestamp for unique filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # Configure yt-dlp download options
+        ydl_opts = {
+            'format': format_id if format_id != 'best' else 'best[ext=mp4]/best',
+            'outtmpl': os.path.join(DOWNLOAD_FOLDER, f'tiktok_{timestamp}.%(ext)s'),
+            'quiet': True,
+            'no_warnings': True,
+        }
+        
+        downloaded_file = None
+        
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            
+            # Find the downloaded file
+            expected_ext = info.get('ext', 'mp4')
+            expected_filename = f'tiktok_{timestamp}.{expected_ext}'
+            expected_path = os.path.join(DOWNLOAD_FOLDER, expected_filename)
+            
+            if os.path.exists(expected_path):
+                downloaded_file = expected_filename
+            else:
+                # Check for any file with the timestamp
+                files_in_folder = os.listdir(DOWNLOAD_FOLDER)
+                matching_files = [f for f in files_in_folder if f'tiktok_{timestamp}' in f]
+                if matching_files:
+                    downloaded_file = matching_files[0]
+        
+        if downloaded_file and os.path.exists(os.path.join(DOWNLOAD_FOLDER, downloaded_file)):
+            return jsonify({
+                'success': True,
+                'download_url': f'/api/download-video-file/{downloaded_file}',
+                'filename': downloaded_file
+            })
+        else:
+            return jsonify({'error': 'Download failed - file not found'}), 500
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -14,6 +14,8 @@ export default function Header() {
         <nav className={styles.nav}>
           <Link href="/" className={styles.navLink}>Video Downloader</Link>
           <Link href="/image-downloader" className={styles.navLink}>Image Downloader</Link>
+          <Link href="/twitter-downloader" className={styles.navLink}>Twitter Downloader</Link>
+          <Link href="/tiktok-downloader" className={styles.navLink}>TikTok Downloader</Link>
           <Link href="/how-to" className={styles.navLink}>How To</Link>
         </nav>
       </div>
