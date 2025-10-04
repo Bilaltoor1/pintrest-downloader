@@ -4,6 +4,7 @@ export default async function sitemap() {
     '',
     '/image-downloader',
     '/twitter-downloader',
+    '/tiktok-downloader',
     '/how-to',
     '/about-us',
     '/contact-us',
