@@ -1,6 +1,15 @@
 export default async function sitemap() {
   const baseUrl = 'https://yttmp3.com'
-  const routes = ['', '/about-us', '/contact-us', '/how-to', '/terms', '/privacy-policy', '/supported-urls']
+  const routes = [
+    '',
+    '/image-downloader',
+    '/how-to',
+    '/about-us',
+    '/contact-us',
+    '/supported-urls',
+    '/terms',
+    '/privacy-policy',
+  ]
   return routes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

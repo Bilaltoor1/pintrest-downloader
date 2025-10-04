@@ -7,8 +7,8 @@ export default function Footer() {
       <div className={styles.footerContent}>
         <div className={styles.footerLinks}>
           <span>2025 Copyright | </span>
-          <span>Powered by BD Network | </span>
-          <Link href="/video-downloader" className={styles.footerLink}>Video Downloader</Link>
+          <span>Powered by Bilal Toor | </span>
+          <Link href="/" className={styles.footerLink}>Video Downloader</Link>
           <span> | </span>
           <Link href="/image-downloader" className={styles.footerLink}>Image Downloader</Link>
           <span> | </span>
