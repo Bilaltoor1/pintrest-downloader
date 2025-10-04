@@ -10,6 +10,16 @@ from werkzeug.utils import secure_filename
 import requests
 import yt_dlp
 
+from services.pinterest_service import download_pinterest_video
+from services.twitter_service import (
+    scrape_twitter_metadata,
+    download_twitter_video,
+)
+from services.tiktok_service import (
+    scrape_tiktok_metadata,
+    download_tiktok_video,
+)
+
 app = Flask(__name__)
 # Enable CORS for all routes with explicit configuration
 CORS(app, resources={
@@ -672,117 +682,23 @@ def download_video():
         # Normalize URL
         url = normalize_url(url)
         
-        # Create unique filename
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        output_template = os.path.join(DOWNLOAD_FOLDER, f'pinterest_video_{timestamp}.%(ext)s')
-        
-        # Try downloading with audio first
-        audio_merged = False
-        warning_message = None
-        
-        # Configure yt-dlp options with FFmpeg for merging video and audio
-        if format_id == 'best':
-            # Download best video + best audio and merge them
-            format_selector = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best'
-        else:
-            # Download specific video format + best audio and merge
-            format_selector = f'{format_id}+bestaudio/best'
-        
-        ydl_opts = {
-            'format': format_selector,
-            'outtmpl': output_template,
-            'quiet': False,
-            'no_warnings': False,
-            'merge_output_format': 'mp4',
-            'postprocessors': [{
-                'key': 'FFmpegVideoConvertor',
-                'preferedformat': 'mp4',
-            }],
-            'prefer_ffmpeg': True,
-            'keepvideo': False,
+        download_result = download_pinterest_video(
+            url,
+            format_id,
+            DOWNLOAD_FOLDER,
+        )
+
+        response_data = {
+            'success': True,
+            'download_url': f"/api/download-video-file/{download_result['filename']}",
+            'filename': download_result['filename'],
+            'audio_merged': download_result['audio_merged']
         }
+
+        if download_result['warning']:
+            response_data['warning'] = download_result['warning']
         
-        downloaded_file = None
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            try:
-                info = ydl.extract_info(url, download=True)
-                downloaded_file = ydl.prepare_filename(info)
-                audio_merged = True
-                
-            except Exception as merge_error:
-                # If FFmpeg merge fails, try downloading video only
-                if 'ffmpeg' in str(merge_error).lower() or 'merging' in str(merge_error).lower():
-                    print(f"FFmpeg merge failed: {merge_error}")
-                    print("Attempting to download video only without audio...")
-                    warning_message = "Audio could not be merged (FFmpeg not available). Downloaded video only."
-                    
-                    # Fallback to video-only download
-                    ydl_opts_video_only = {
-                        'format': 'bestvideo[ext=mp4]/best[ext=mp4]/best',
-                        'outtmpl': output_template,
-                        'quiet': False,
-                        'no_warnings': False,
-                    }
-                    
-                    try:
-                        with yt_dlp.YoutubeDL(ydl_opts_video_only) as ydl_fallback:
-                            info = ydl_fallback.extract_info(url, download=True)
-                            downloaded_file = ydl_fallback.prepare_filename(info)
-                            audio_merged = False
-                    except Exception as video_error:
-                        return jsonify({'error': f'Failed to download video: {str(video_error)}'}), 500
-                else:
-                    raise merge_error
-        
-        # Find the downloaded file
-        if downloaded_file and not os.path.exists(downloaded_file):
-            base = os.path.splitext(downloaded_file)[0]
-            downloaded_file = base + '.mp4'
-        
-        if not os.path.exists(downloaded_file):
-            # Try other extensions as fallback
-            base = os.path.splitext(downloaded_file)[0] if downloaded_file else os.path.join(DOWNLOAD_FOLDER, f'pinterest_video_{timestamp}')
-            for ext in ['.webm', '.mkv', '.f137.mp4', '.f251.webm']:
-                test_file = base + ext
-                if os.path.exists(test_file):
-                    downloaded_file = test_file
-                    break
-        
-        if downloaded_file and os.path.exists(downloaded_file):
-            filename = os.path.basename(downloaded_file)
-            
-            response_data = {
-                'success': True,
-                'download_url': f'/api/download-video-file/{filename}',
-                'filename': filename,
-                'audio_merged': audio_merged
-            }
-            
-            if warning_message:
-                response_data['warning'] = warning_message
-            
-            return jsonify(response_data)
-        else:
-            # List files in download folder for debugging
-            files_in_folder = os.listdir(DOWNLOAD_FOLDER)
-            matching_files = [f for f in files_in_folder if timestamp in f]
-            
-            if matching_files:
-                filename = matching_files[0]
-                response_data = {
-                    'success': True,
-                    'download_url': f'/api/download-video-file/{filename}',
-                    'filename': filename,
-                    'audio_merged': audio_merged
-                }
-                
-                if warning_message:
-                    response_data['warning'] = warning_message
-                
-                return jsonify(response_data)
-            
-            return jsonify({'error': 'Download failed - file not found'}), 500
+        return jsonify(response_data)
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -833,44 +749,8 @@ def scrape_twitter():
         if not url:
             return jsonify({'error': 'URL is required'}), 400
         
-        # Configure yt-dlp options for metadata extraction
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'extract_flat': False,
-        }
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            
-            # Extract formats
-            formats = []
-            if 'formats' in info:
-                for fmt in info['formats']:
-                    if fmt.get('vcodec') != 'none':  # Only video formats
-                        formats.append({
-                            'format_id': fmt.get('format_id', ''),
-                            'quality': fmt.get('format_note', 'unknown'),
-                            'width': fmt.get('width', 0),
-                            'height': fmt.get('height', 0),
-                            'filesize': fmt.get('filesize', 0),
-                            'ext': fmt.get('ext', 'mp4')
-                        })
-            
-            # Sort formats by quality (height)
-            formats.sort(key=lambda x: x['height'], reverse=True)
-            
-            media = [{
-                'title': info.get('title', 'Twitter Video'),
-                'thumbnail': info.get('thumbnail', ''),
-                'duration': info.get('duration', 0),
-                'formats': formats
-            }]
-            
-            return jsonify({
-                'count': 1,
-                'media': media
-            })
+        result = scrape_twitter_metadata(url)
+        return jsonify(result)
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -886,44 +766,23 @@ def download_twitter():
         if not url:
             return jsonify({'error': 'URL is required'}), 400
         
-        # Generate timestamp for unique filename
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        
-        # Configure yt-dlp download options
-        ydl_opts = {
-            'format': format_id if format_id != 'best' else 'best[ext=mp4]/best',
-            'outtmpl': os.path.join(DOWNLOAD_FOLDER, f'twitter_{timestamp}.%(ext)s'),
-            'quiet': True,
-            'no_warnings': True,
+        download_result = download_twitter_video(
+            url,
+            format_id,
+            DOWNLOAD_FOLDER,
+        )
+
+        response_data = {
+            'success': True,
+            'download_url': f"/api/download-video-file/{download_result['filename']}",
+            'filename': download_result['filename'],
+            'audio_merged': download_result['audio_merged']
         }
+
+        if download_result['warning']:
+            response_data['warning'] = download_result['warning']
         
-        downloaded_file = None
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=True)
-            
-            # Find the downloaded file
-            expected_ext = info.get('ext', 'mp4')
-            expected_filename = f'twitter_{timestamp}.{expected_ext}'
-            expected_path = os.path.join(DOWNLOAD_FOLDER, expected_filename)
-            
-            if os.path.exists(expected_path):
-                downloaded_file = expected_filename
-            else:
-                # Check for any file with the timestamp
-                files_in_folder = os.listdir(DOWNLOAD_FOLDER)
-                matching_files = [f for f in files_in_folder if f'twitter_{timestamp}' in f]
-                if matching_files:
-                    downloaded_file = matching_files[0]
-        
-        if downloaded_file and os.path.exists(os.path.join(DOWNLOAD_FOLDER, downloaded_file)):
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download-video-file/{downloaded_file}',
-                'filename': downloaded_file
-            })
-        else:
-            return jsonify({'error': 'Download failed - file not found'}), 500
+        return jsonify(response_data)
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -938,44 +797,8 @@ def scrape_tiktok():
         if not url:
             return jsonify({'error': 'URL is required'}), 400
         
-        # Configure yt-dlp options for metadata extraction
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'extract_flat': False,
-        }
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            
-            # Extract formats
-            formats = []
-            if 'formats' in info:
-                for fmt in info['formats']:
-                    if fmt.get('vcodec') != 'none':  # Only video formats
-                        formats.append({
-                            'format_id': fmt.get('format_id', ''),
-                            'quality': fmt.get('format_note', 'unknown'),
-                            'width': fmt.get('width', 0),
-                            'height': fmt.get('height', 0),
-                            'filesize': fmt.get('filesize', 0),
-                            'ext': fmt.get('ext', 'mp4')
-                        })
-            
-            # Sort formats by quality (height)
-            formats.sort(key=lambda x: x['height'], reverse=True)
-            
-            media = [{
-                'title': info.get('title', 'TikTok Video'),
-                'thumbnail': info.get('thumbnail', ''),
-                'duration': info.get('duration', 0),
-                'formats': formats
-            }]
-            
-            return jsonify({
-                'count': 1,
-                'media': media
-            })
+        result = scrape_tiktok_metadata(url)
+        return jsonify(result)
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -991,44 +814,23 @@ def download_tiktok():
         if not url:
             return jsonify({'error': 'URL is required'}), 400
         
-        # Generate timestamp for unique filename
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        
-        # Configure yt-dlp download options
-        ydl_opts = {
-            'format': format_id if format_id != 'best' else 'best[ext=mp4]/best',
-            'outtmpl': os.path.join(DOWNLOAD_FOLDER, f'tiktok_{timestamp}.%(ext)s'),
-            'quiet': True,
-            'no_warnings': True,
+        download_result = download_tiktok_video(
+            url,
+            format_id,
+            DOWNLOAD_FOLDER,
+        )
+
+        response_data = {
+            'success': True,
+            'download_url': f"/api/download-video-file/{download_result['filename']}",
+            'filename': download_result['filename'],
+            'audio_merged': download_result['audio_merged']
         }
+
+        if download_result['warning']:
+            response_data['warning'] = download_result['warning']
         
-        downloaded_file = None
-        
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=True)
-            
-            # Find the downloaded file
-            expected_ext = info.get('ext', 'mp4')
-            expected_filename = f'tiktok_{timestamp}.{expected_ext}'
-            expected_path = os.path.join(DOWNLOAD_FOLDER, expected_filename)
-            
-            if os.path.exists(expected_path):
-                downloaded_file = expected_filename
-            else:
-                # Check for any file with the timestamp
-                files_in_folder = os.listdir(DOWNLOAD_FOLDER)
-                matching_files = [f for f in files_in_folder if f'tiktok_{timestamp}' in f]
-                if matching_files:
-                    downloaded_file = matching_files[0]
-        
-        if downloaded_file and os.path.exists(os.path.join(DOWNLOAD_FOLDER, downloaded_file)):
-            return jsonify({
-                'success': True,
-                'download_url': f'/api/download-video-file/{downloaded_file}',
-                'filename': downloaded_file
-            })
-        else:
-            return jsonify({'error': 'Download failed - file not found'}), 500
+        return jsonify(response_data)
             
     except Exception as e:
         return jsonify({'error': str(e)}), 500
