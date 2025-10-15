@@ -106,12 +106,13 @@ export default function HowToPage() {
                   </div>
                 </div>
               </div>
-
+       
+          
               <div className={styles.proTip}>
                 <strong>Pro Tip:</strong> For bulk downloads, use our Bulk Download mode to download multiple pins at once
               </div>
             </div>
-
+              
             <div className={styles.instructionCard}>
               <h3 className={styles.featureTitle}>Mobile Instructions</h3>
               <div className={styles.stepsList}>

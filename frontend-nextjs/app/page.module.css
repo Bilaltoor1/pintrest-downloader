@@ -532,6 +532,16 @@
     list-style-type: decimal;
 }
 
+/* Download Steps Image */
+.downloadStepsImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  display: block;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero {

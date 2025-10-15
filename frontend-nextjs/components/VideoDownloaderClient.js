@@ -97,7 +97,7 @@ export default function VideoDownloaderClient() {
       <section className={styles.hero}>
         <h1 className={styles.mainTitle}>Pinterest Video Downloader</h1>
         <p className={styles.subtitle}>
-          Save Pinterest Videos Instantly - Fast, Online, and Always Free Download Pinterest Videos
+         Download Free Pinterest Videos in High Quality
         </p>
 
         <div className={styles.downloadSection}>
