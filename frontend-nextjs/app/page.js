@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import styles from './page.module.css'
 import VideoDownloaderClient from '@/components/VideoDownloaderClient'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Pinterest Video Downloader- Download HD Videos, GIFs & Images in 1 Click!',
@@ -71,7 +72,10 @@ export default function HomePage() {
               <li>You can download bulk images as zip or then in jpg or png</li>
             </ul>
             <p>
-            You can even use yttmp3 to download bulk images from Pinterest and download them as a zip file you can download 50 or even 100 pins at a time so give a chance to yttmp3 pinterest downloader which helps you to download your favorite pins from pinterest.
+            You can even use yttmp3 to download bulk images from Pinterest and download them as a zip file you can download 50 or even 100 pins at a time so give a chance to yttmp3 pinterest downloader which helps you to download your favorite pins from pinterest if you want to download only images visit 
+            <Link style={{
+              color:'purple'
+            }} href='/image-downloader'>pinterest image downloader</Link>.
           </p>
           
         </section>

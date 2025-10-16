@@ -1,6 +1,7 @@
 import Script from 'next/script'
 import styles from './page.module.css'
 import ImageDownloaderClient from '@/components/ImageDownloaderClient'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Pinterest Image Downloader - Pinterest Downloader yttmp3.com',
@@ -73,7 +74,9 @@ export default function ImageDownloader() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Supported Video Quality & Formats</h2>
           <p className={styles.sectionText}>
-            One of the best things about yttmp3 is the choice of download quality. Whether you’re on mobile data or Wi-Fi, you can choose the right format and resolution.
+            One of the best things about yttmp3 is the choice of download quality. Whether you’re on mobile data or Wi-Fi, you can choose the right format and resolution for downloading the images visit <Link style={{
+              color:'purple'
+            }} href='/'>pinterest video downloader</Link>.
           </p>
            <span> We support:</span>
             <ul style={
