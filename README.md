@@ -238,6 +238,38 @@ chmod +x deploy/migrate-to-nextjs.sh
 
 See [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for details.
 
+## 🤖 Automated Deployment (GitHub Actions)
+
+**NEW!** Automated deployment to VPS whenever you push code:
+
+### Quick Setup (5 minutes)
+```bash
+# 1. Generate SSH key
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/github_actions_deploy
+
+# 2. Copy to VPS
+ssh-copy-id -i ~/.ssh/github_actions_deploy.pub root@YOUR_VPS_IP
+
+# 3. Add secrets to GitHub
+# Go to: Settings → Secrets → Actions
+# Add: VPS_HOST, VPS_USERNAME, VPS_SSH_KEY, VPS_PORT
+```
+
+### Daily Workflow
+```bash
+# Make changes
+git add .
+git commit -m "Updated features"
+git push origin main
+
+# GitHub Actions automatically:
+# ✅ Pulls code on VPS
+# ✅ Rebuilds containers
+# ✅ Restarts services
+```
+
+**See**: [QUICK_DEPLOY.md](QUICK_DEPLOY.md) for step-by-step guide
+
 ## 🎯 Architecture
 
 ```
